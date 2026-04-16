@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>煎藥計算系統 - 專業版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Han Sans TC', 'Noto Sans TC', '思源黑體', sans-serif;
+            background: #1B4D3E;
+            min-height: 100vh;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1B4D3E 0%, #2C5F2D 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-family: 'Source Han Sans TC', 'Noto Sans TC', '思源黑體', sans-serif;
+        }
+
+        .header .subtitle-large {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .header .subtitle-small {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2C5F2D;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #97BC62;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-family: 'Source Han Sans TC', 'Noto Sans TC', '思源黑體', sans-serif;
+            font-weight: bold;
+        }
+
+        /* 數字使用Arial粗體 */
+        .number-value {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+
+        .result-value {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+        }
+
+        .grid-result {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #2C5F2D;
+            box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checkbox-group:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .info-badge {
+            display: inline-block;
+            background: #ffc107;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .special-herbs-list {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            line-height: 2;
+            color: #856404;
+        }
+
+        .special-herbs-list strong {
+            font-size: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2C5F2D 0%, #4A8F2E 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(44, 95, 45, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .result-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2C5F2D;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .result-value {
+            color: #2C5F2D;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .equipment-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .equipment-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .equipment-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .equipment-spec {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .formula-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .formula-title {
+            font-weight: 700;
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .formula-text {
+            font-family: 'Courier New', monospace;
+            color: #0d47a1;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .warning-box p {
+            color: #c62828;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .warning-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            background: #f8f9fa;
+            border-top: 2px solid #2C5F2D;
+            padding: 25px 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .footer-credit {
+            color: #555;
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .footer-credit.guidance {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .footer-credit.production {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .footer-motto {
+            color: #2C5F2D;
+            font-size: 15px;
+            font-weight: 600;
+            margin: 12px 0 8px 0;
+        }
+
+        .footer-copyright {
+            color: #888;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p class="subtitle-small">台中慈濟醫院藥學部</p>
+            <h1>好媳婦煎藥藥液計算系統</h1>
+        </div>
+
+        <div class="content">
+            <!-- 基本資料 -->
+            <div class="section">
+                <div class="section-title">📋 請輸入中藥代煎藥品資料</div>
+                
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label>每日頻率 (次/天)</label>
+                        <select id="frequency">
+                            <option value="1">1 次/天</option>
+                            <option value="2" selected>2 次/天</option>
+                            <option value="3">3 次/天</option>
+                            <option value="4">4 次/天</option>
+                            <option value="5">5 次/天</option>
+                            <option value="6">6 次/天</option>
+                            <option value="7">7 次/天</option>
+                            <option value="8">8 次/天</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>天數</label>
+                        <select id="days">
+                            <option value="1">1 天</option>
+                            <option value="2">2 天</option>
+                            <option value="3">3 天</option>
+                            <option value="4">4 天</option>
+                            <option value="5">5 天</option>
+                            <option value="6">6 天</option>
+                            <option value="7" selected>7 天</option>
+                            <option value="8">8 天</option>
+                            <option value="9">9 天</option>
+                            <option value="10">10 天</option>
+                            <option value="11">11 天</option>
+                            <option value="12">12 天</option>
+                            <option value="13">13 天</option>
+                            <option value="14">14 天</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label>單包水量（ml）</label>
+                        <input type="number" id="waterPerPack" min="1" value="100" placeholder="請輸入單包水量（ml）">
+                    </div>
+
+                    <div class="input-group">
+                        <label>藥材總重（g）</label>
+                        <input type="number" id="herbWeight" min="1" placeholder="請輸入藥材總重量（g）">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>藥材類型</label>
+                    <select id="herbType">
+                        <option value="normal" selected>一般藥材</option>
+                        <option value="special_below">特殊藥材一半以下</option>
+                        <option value="special_above">特殊藥材一半以上</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 特殊藥材說明 -->
+            <div class="section">
+                <div class="special-herbs-list">
+                    <strong>特殊藥材種類：</strong><br>
+                    草本與葉類：蒲公英、綿茵陳、防風<br>
+                    根莖與皮類：北沙參、山藥、黨參、天門冬、麥門冬<br>
+                    種子與果實類：胖大海、王不留行子、葶藶子、紫蘇子、車前子、菟絲子、薏苡仁、赤小豆、炒麥芽<br>
+                    花類：銀花<br><br>
+                    <strong>吸水係數說明：</strong><br>
+                    • 一般藥材：吸水係數 = 1.3<br>
+                    • 特殊藥材一半以下（≤50%）：吸水係數 = 1.3<br>
+                    • 特殊藥材一半以上（>50%）：吸水係數 = 2.5
+                </div>
+            </div>
+
+            <!-- 設備補償 -->
+            <div class="section">
+                <div class="section-title">⚙️ 設備補償設定</div>
+                
+                <div class="checkbox-group" onclick="toggleCheckbox('lowWater')">
+                    <input type="checkbox" id="lowWater">
+                    <label>啞巴媳婦水位未淹過發熱芯
+                        <span class="info-badge">+600ml</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group" onclick="toggleCheckbox('evaporation')">
+                    <input type="checkbox" id="evaporation">
+                    <label>啞巴媳婦蒸發補償（40分鐘後補水）
+                        <span class="info-badge">+600ml</span>
+                    </label>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>特殊煎煮法</label>
+                    <select id="specialMethod">
+                        <option value="normal">一般煎煮</option>
+                        <option value="first">先煎（增加水量）</option>
+                        <option value="concentrated">濃煎（減少水量，+30分鐘）</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="calculate()">💧 計算加水量 & 煎煮容器選擇</button>
+
+            <!-- 結果顯示區 -->
+            <div id="result" class="result">
+                <!-- 煎煮容器選擇 -->
+                <div class="equipment-card" id="equipmentCard">
+                    <div class="equipment-icon" id="equipmentIcon">🔥</div>
+                    <div class="equipment-name" id="equipmentName">建議煎煮容器</div>
+                    <div class="equipment-spec" id="equipmentSpec">-</div>
+                </div>
+
+                <!-- 加水量計算 -->
+                <div class="result-card">
+                    <div class="result-header">💧 總加水量</div>
+                    
+                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; margin-bottom: 15px;">
+                        <div style="font-size: 48px; font-weight: 700; color: #2C5F2D; font-family: 'Arial', sans-serif;" id="totalWater">-</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 5px;">需加入的總水量</div>
+                    </div>
+
+                    <div class="grid-result">
+                        <div class="result-item">
+                            <div class="result-label">估算體積（藥材+水）</div>
+                            <div class="result-value" id="estimatedVolume">-</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-label">藥材吸水量</div>
+                            <div class="result-value" id="absorption">-</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-label">總包數</div>
+                            <div class="result-value" id="totalPacks">-</div>
+                        </div>
+
+                        <div class="result-item">
+                            <div class="result-label">藥液產出量</div>
+                            <div class="result-value" id="liquidOutput">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-title">📐 計算公式</div>
+                    <div class="formula-text" id="formulaText">-</div>
+                </div>
+
+                <div class="warning-box" id="warningBox" style="display: none;">
+                    <p id="warningText"></p>
+                </div>
+
+                <!-- 八分滿檢查（簡化版） -->
+                <div class="result-card" style="margin-top: 20px;">
+                    <div class="result-header" style="color: #856404;">⚠️ 第二階段：容器容量檢查（選用）</div>
+                    
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p style="color: #856404; font-size: 16px; margin: 0; line-height: 1.8;">
+                            💡 若實際倒入藥材後發現超過八分滿，請勾選下方選項，系統將自動建議使用更大的器具。
+                        </p>
+                    </div>
+
+                    <div class="checkbox-group" onclick="toggleCheckbox('over80')">
+                        <input type="checkbox" id="over80">
+                        <label style="font-size: 18px; font-weight: 700;">
+                            藥材倒入後是否超過八分滿？ 是
+                        </label>
+                    </div>
+
+                    <div id="finalEquipment" style="display: none; margin-top: 20px; padding: 25px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-radius: 12px; border-left: 6px solid #f44336; box-shadow: 0 4px 15px rgba(244, 67, 54, 0.2);">
+                        <div style="color: #c62828; font-size: 18px; font-weight: 700; margin-bottom: 15px;">
+                            ⚠️ 請改用更大容器
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div id="finalEquipmentIcon" style="font-size: 48px;">🔥</div>
+                            <div>
+                                <div id="finalEquipmentName" style="color: #2C5F2D; font-size: 28px; font-weight: 700; margin-bottom: 5px;">
+                                    -
+                                </div>
+                                <div id="finalEquipmentSpec" style="color: #666; font-size: 14px; font-family: 'Arial', sans-serif;">
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-credit guidance">
+            <strong>指導：</strong>陳綺華 部主任・李雅蓁 主任
+        </div>
+        <div class="footer-credit production">
+            <strong>製作：</strong>張雅婷・許文馨
+        </div>
+        <div class="footer-motto">
+            合心協力・精進專業
+        </div>
+        <div class="footer-copyright">
+            © 2026.04 All Rights Reserved
+        </div>
+    </div>
+
+    <script>
+        // 設備規格
+        const equipment = [
+            { name: '啞巴媳婦（小）', icon: '🫖', capacity: 2000, minWater: 1500 },
+            { name: '啞巴媳婦（大）', icon: '🍲', capacity: 3000, minWater: 2000 },
+            { name: '壓力鍋（小）', icon: '🥘', capacity: 10000, minWater: 7000 },
+            { name: '壓力鍋（大）', icon: '🍳', capacity: 12000, minWater: 9000 },
+            { name: '小型煎藥機（小1）', icon: '⚙️', capacity: 14000, minWater: 10000 },
+            { name: '中型煎藥機', icon: '🏭', capacity: 20000, minWater: 13000 },
+            { name: '大型煎藥機', icon: '🏭', capacity: 55000, minWater: 40000 }
+        ];
+
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            checkbox.checked = !checkbox.checked;
+            // 手動觸發change事件
+            checkbox.dispatchEvent(new Event('change'));
+        }
+
+        function calculate() {
+            // 獲取輸入值
+            const frequency = parseInt(document.getElementById('frequency').value);
+            const days = parseInt(document.getElementById('days').value);
+            const waterPerPack = parseFloat(document.getElementById('waterPerPack').value);
+            const herbWeight = parseFloat(document.getElementById('herbWeight').value);
+            const herbType = document.getElementById('herbType').value;
+            const lowWater = document.getElementById('lowWater').checked;
+            const evaporation = document.getElementById('evaporation').checked;
+            const specialMethod = document.getElementById('specialMethod').value;
+
+            // 驗證輸入
+            if (!herbWeight || herbWeight <= 0) {
+                alert('請輸入有效的藥材總重量！');
+                return;
+            }
+
+            if (!waterPerPack || waterPerPack <= 0) {
+                alert('請輸入有效的單包水量！');
+                return;
+            }
+
+            // 計算總包數
+            const totalPacks = frequency * days;
+
+            // 藥材吸水係數
+            // 無（一般）= 1.3
+            // 是（一半以下）= 1.3
+            // 是（一半以上）= 2.5
+            let absorptionCoeff;
+            if (herbType === 'special_above') {
+                absorptionCoeff = 2.5;
+            } else {
+                absorptionCoeff = 1.3;
+            }
+
+            // 藥材吸水量
+            const absorption = herbWeight * absorptionCoeff;
+
+            // 單包水量概算（需求量 + 20ml）
+            const waterEstimate = waterPerPack + 20;
+
+            // 藥液產出量
+            const liquidOutput = totalPacks * waterEstimate;
+
+            // 總加水量基礎計算
+            let totalWater = absorption + liquidOutput;
+
+            // 設備補償
+            let compensation = 0;
+            if (lowWater) {
+                compensation += 600;
+            }
+            if (evaporation && waterPerPack >= 200) {
+                compensation += 600;
+            }
+
+            // 特殊煎煮法調整
+            let methodAdjustment = '';
+            if (specialMethod === 'first') {
+                totalWater *= 1.2; // 增加20%水量
+                methodAdjustment = '先煎增加20%水量';
+            } else if (specialMethod === 'concentrated') {
+                totalWater *= 0.85; // 減少15%水量
+                methodAdjustment = '濃煎減少15%水量，需增加煎煮時間30分鐘';
+            }
+
+            totalWater += compensation;
+
+            // 估算體積（藥材重量 + 總水量）
+            const estimatedVolume = herbWeight + totalWater;
+
+            // 自動計算建議器具
+            let recommendedEquipment = null;
+            for (let eq of equipment) {
+                if (totalWater <= eq.minWater) {
+                    recommendedEquipment = eq;
+                    break;
+                }
+            }
+
+            if (!recommendedEquipment) {
+                recommendedEquipment = equipment[equipment.length - 1];
+            }
+
+            // 儲存推薦器具到全域變數，供後續使用
+            window.currentRecommendedEquipment = recommendedEquipment;
+            window.currentEquipmentList = equipment;
+
+            // 顯示結果
+            document.getElementById('totalWater').textContent = Math.round(totalWater) + ' ml';
+            document.getElementById('estimatedVolume').textContent = Math.round(estimatedVolume) + ' ml';
+            document.getElementById('totalPacks').textContent = totalPacks + ' 包';
+            document.getElementById('absorption').textContent = Math.round(absorption) + ' ml';
+            document.getElementById('liquidOutput').textContent = liquidOutput + ' ml';
+
+            document.getElementById('equipmentIcon').textContent = recommendedEquipment.icon;
+            document.getElementById('equipmentName').textContent = recommendedEquipment.name;
+            document.getElementById('equipmentSpec').textContent = 
+                `最大容量：${recommendedEquipment.capacity}ml | 容許水量：${recommendedEquipment.minWater}ml`;
+
+            // 重置八分滿勾選框和最終器具顯示
+            document.getElementById('over80').checked = false;
+            document.getElementById('finalEquipment').style.display = 'none';
+            document.getElementById('finalEquipmentName').textContent = '-';
+
+            // 顯示計算公式
+            let formulaText = `總加水量 = 藥材總重(${herbWeight}g) × ${absorptionCoeff} + 總包數(${totalPacks}) × 單包概算(${waterEstimate}ml)`;
+            if (compensation > 0) {
+                formulaText += ` + 設備補償(${compensation}ml)`;
+            }
+            formulaText += `\n= ${Math.round(absorption)} + ${liquidOutput}`;
+            if (compensation > 0) {
+                formulaText += ` + ${compensation}`;
+            }
+            formulaText += ` = ${Math.round(totalWater)} ml`;
+            if (methodAdjustment) {
+                formulaText += `\n${methodAdjustment}`;
+            }
+            formulaText += `\n\n單包概算 = ${waterPerPack}ml + 20ml = ${waterEstimate}ml`;
+
+            document.getElementById('formulaText').textContent = formulaText;
+
+            // 警告訊息
+            const warningBox = document.getElementById('warningBox');
+            const warningText = document.getElementById('warningText');
+            let warnings = [];
+
+            if (totalWater > recommendedEquipment.capacity) {
+                warnings.push('⚠️ 計算水量超過所選設備最大容量，請改用更大設備或聯絡主管！');
+            }
+
+            if (herbType === 'special_above') {
+                warnings.push('✓ 已使用特殊藥材吸水係數 2.5（一半以上）');
+            } else if (herbType === 'special_below') {
+                warnings.push('✓ 特殊藥材一半以下，使用吸水係數 1.3');
+            }
+
+            if (evaporation && waterPerPack < 200) {
+                warnings.push('ℹ️ 需求量 < 200ml，無須蒸發補水');
+            }
+
+            warnings.push('💡 加完水後若未沒過藥材，須補水至沒過藥材表面');
+            warnings.push('💡 若藥材倒入後超過8分滿，須改用下一種器具');
+
+            if (warnings.length > 0) {
+                warningText.innerHTML = warnings.map(w => `<p>${w}</p>`).join('');
+                warningBox.style.display = 'block';
+            } else {
+                warningBox.style.display = 'none';
+            }
+
+            // 顯示結果區域
+            document.getElementById('result').classList.add('show');
+            
+            // 滾動到結果區域
+            setTimeout(() => {
+                document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Enter鍵觸發計算
+        document.getElementById('waterPerPack').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+        document.getElementById('herbWeight').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+
+        // 八分滿勾選框事件
+        document.getElementById('over80').addEventListener('change', function() {
+            if (!window.currentRecommendedEquipment) {
+                alert('請先計算加水量！');
+                this.checked = false;
+                return;
+            }
+
+            const finalEquipmentDiv = document.getElementById('finalEquipment');
+            const finalEquipmentIcon = document.getElementById('finalEquipmentIcon');
+            const finalEquipmentName = document.getElementById('finalEquipmentName');
+            const finalEquipmentSpec = document.getElementById('finalEquipmentSpec');
+
+            if (this.checked) {
+                // 勾選：超過8分滿，使用下一級器具
+                const currentIndex = window.currentEquipmentList.indexOf(window.currentRecommendedEquipment);
+                let finalEquipment;
+
+                if (currentIndex < window.currentEquipmentList.length - 1) {
+                    finalEquipment = window.currentEquipmentList[currentIndex + 1];
+                    finalEquipmentIcon.textContent = finalEquipment.icon;
+                    finalEquipmentName.textContent = finalEquipment.name;
+                    finalEquipmentSpec.textContent = `最大容量：${finalEquipment.capacity}ml | 容許水量：${finalEquipment.minWater}ml`;
+                } else {
+                    finalEquipment = window.currentRecommendedEquipment;
+                    finalEquipmentIcon.textContent = finalEquipment.icon;
+                    finalEquipmentName.textContent = finalEquipment.name + ' (已是最大器具)';
+                    finalEquipmentSpec.textContent = '請聯絡主管處理';
+                }
+
+                finalEquipmentDiv.style.display = 'block';
+            } else {
+                // 取消勾選：隱藏最終器具區塊
+                finalEquipmentDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
