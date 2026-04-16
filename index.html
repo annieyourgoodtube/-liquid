@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>好媳婦煎藥藥液計算系統</title>
+    <title>「好媳婦」：中藥煎煮水量計算系統</title>
     <style>
         * {
             margin: 0;
@@ -31,20 +31,23 @@
         .header {
             background: linear-gradient(135deg, #1B4D3E 0%, #2C5F2D 100%);
             color: white;
-            padding: 20px 15px;
+            padding: 25px 20px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 0;
             font-weight: 700;
             font-family: 'Source Han Sans TC', 'Noto Sans TC', '思源黑體', sans-serif;
+            line-height: 1.5;
+            letter-spacing: 1px;
         }
 
         .header .subtitle-small {
-            font-size: 12px;
+            font-size: 14px;
             opacity: 0.9;
+            margin-bottom: 10px;
         }
 
         .content {
@@ -397,19 +400,19 @@
             }
             
             .header {
-                padding: 18px 12px;
+                padding: 20px 15px;
                 border-radius: 0;
             }
             
             .header h1 {
-                font-size: 22px;
-                line-height: 1.4;
-                letter-spacing: 1px;
+                font-size: 23px;
+                line-height: 1.5;
+                letter-spacing: 0.5px;
             }
             
             .header .subtitle-small {
-                font-size: 12px;
-                margin-bottom: 8px;
+                font-size: 13px;
+                margin-bottom: 10px;
             }
             
             .content {
@@ -507,11 +510,11 @@
 
         @media (min-width: 601px) {
             .header h1 {
-                font-size: 32px;
+                font-size: 36px;
             }
             
             .header .subtitle-small {
-                font-size: 13px;
+                font-size: 15px;
             }
             
             .content {
@@ -562,7 +565,7 @@
     <div class="container">
         <div class="header">
             <p class="subtitle-small">台中慈濟醫院藥學部</p>
-            <h1>好媳婦煎藥藥液計算系統</h1>
+            <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
         </div>
 
         <div class="content">
@@ -580,8 +583,6 @@
                             <option value="4">4 次/天</option>
                             <option value="5">5 次/天</option>
                             <option value="6">6 次/天</option>
-                            <option value="7">7 次/天</option>
-                            <option value="8">8 次/天</option>
                         </select>
                     </div>
 
@@ -777,9 +778,9 @@
                 <div class="result-card">
                     <div class="result-header">💧 總加水量</div>
                     
-                    <div style="text-align: center; padding: 20px; background: white; border-radius: 10px; margin-bottom: 15px;">
-                        <div style="font-size: 48px; font-weight: 700; color: #2C5F2D; font-family: 'Arial', sans-serif;" id="totalWater">-</div>
-                        <div style="font-size: 14px; color: #666; margin-top: 5px;">需加入的總水量</div>
+                    <div style="text-align: center; padding: 25px 20px; background: linear-gradient(135deg, #2C5F2D 0%, #4CAF50 100%); border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(44, 95, 45, 0.3);">
+                        <div style="font-size: 48px; font-weight: 700; color: white; font-family: 'Arial', sans-serif;" id="totalWater">-</div>
+                        <div style="font-size: 16px; color: white; margin-top: 8px; font-weight: 600; opacity: 0.95;">需加入的總水量</div>
                     </div>
 
                     <div class="grid-result">
