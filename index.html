@@ -576,14 +576,19 @@
                 
                 <div class="grid-2">
                     <div class="input-group">
-                        <label>每日頻率 (次/天)</label>
+                        <label>每日頻率</label>
                         <select id="frequency">
-                            <option value="1">1 次/天</option>
-                            <option value="2" selected>2 次/天</option>
-                            <option value="3">3 次/天</option>
-                            <option value="4">4 次/天</option>
-                            <option value="5">5 次/天</option>
-                            <option value="6">6 次/天</option>
+                            <option value="1">QD - 每日一次</option>
+                            <option value="2" selected>BID - 每日兩次</option>
+                            <option value="3">TID - 每日三次</option>
+                            <option value="4">QID - 每日四次</option>
+                            <option value="1">QN - 每晚一次</option>
+                            <option value="24">Q1H - 每1小時一次</option>
+                            <option value="12">Q2H - 每2小時一次</option>
+                            <option value="8">Q3H - 每3小時一次</option>
+                            <option value="4">Q6H - 每6小時一次</option>
+                            <option value="3">Q8H - 每8小時一次</option>
+                            <option value="2">Q12H - 每12小時一次</option>
                         </select>
                     </div>
 
@@ -611,7 +616,7 @@
                 <div class="grid-2">
                     <div class="input-group">
                         <label>單包水量（ml）</label>
-                        <input type="number" id="waterPerPack" min="1" value="100" placeholder="請輸入單包水量（ml）">
+                        <input type="number" id="waterPerPack" min="1" value="100" placeholder="請輸入單包水量">
                     </div>
 
                     <div class="input-group">
@@ -719,13 +724,14 @@
                 </button>
             </div>
 
-            <!-- 第二階段：輸入克數（確認勾選後顯示） -->
+            <!-- 第二階段：輸入重量（確認勾選後顯示） -->
             <div class="section" id="specialHerbsWeightSection" style="display: none;">
-                <div class="section-title">⚖️ 輸入特殊藥材克數</div>
+                <div class="section-title">⚖️ 輸入特殊藥材重量（錢）</div>
                 
                 <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <p style="color: #1565c0; font-size: 14px; margin: 0;">
-                        已選擇 <strong><span id="selectedCount">0</span></strong> 種特殊藥材，請輸入各藥材的克數。
+                    <p style="color: #1565c0; font-size: 14px; margin: 0; line-height: 1.6;">
+                        已選擇 <strong><span id="selectedCount">0</span></strong> 種特殊藥材，請輸入各藥材的重量（錢）。<br>
+                        <span style="font-size: 13px; color: #0277bd;">💡 系統將自動換算為克（1錢 = 3.75克）</span>
                     </p>
                 </div>
 
@@ -930,6 +936,20 @@
             }
         }
 
+        // 錢轉克換算函數（1錢 = 3.75克）
+        function convertQianToGram(herbName) {
+            const qianInput = document.getElementById(`weight_${herbName}`);
+            const convertedSpan = document.getElementById(`converted_${herbName}`);
+            
+            const qianValue = parseFloat(qianInput.value) || 0;
+            if (qianValue > 0) {
+                const gramValue = (qianValue * 3.75).toFixed(2);
+                convertedSpan.textContent = `(${gramValue}g)`;
+            } else {
+                convertedSpan.textContent = '';
+            }
+        }
+
         // 確認勾選，進入第二階段（輸入克數）
         function confirmSelection() {
             const specialHerbs = ['蒲公英', '綿茵陳', '防風', '北沙參', '山藥', '黨參', '天門冬', '麥門冬',
@@ -961,9 +981,10 @@
                 div.className = 'weight-input-item';
                 div.innerHTML = `
                     <label>${herb}</label>
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <input type="number" id="weight_${herb}" min="0" step="0.1" placeholder="0">
-                        <span style="font-size: 14px; color: #666;">g</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="weight_${herb}" min="0" step="0.1" placeholder="0" oninput="convertQianToGram('${herb}')" style="width: 100px;">
+                        <span style="font-size: 14px; color: #666; font-weight: 600;">錢</span>
+                        <span style="font-size: 13px; color: #2C5F2D; min-width: 80px;" id="converted_${herb}"></span>
                     </div>
                 `;
                 weightInputList.appendChild(div);
@@ -993,16 +1014,18 @@
             specialHerbs.forEach(herb => {
                 const weightInput = document.getElementById(`weight_${herb}`);
                 if (weightInput) {
-                    const weight = parseFloat(weightInput.value) || 0;
-                    if (weight > 0) {
+                    const qianValue = parseFloat(weightInput.value) || 0;
+                    if (qianValue > 0) {
                         hasInput = true;
-                        totalSpecialWeight += weight;
+                        // 錢轉克：1錢 = 3.75克
+                        const gramValue = qianValue * 3.75;
+                        totalSpecialWeight += gramValue;
                     }
                 }
             });
             
             if (!hasInput) {
-                alert('請至少輸入一種特殊藥材的克數！');
+                alert('請至少輸入一種特殊藥材的重量！');
                 return;
             }
             
@@ -1049,7 +1072,7 @@
                 return;
             }
 
-            // 計算總包數
+            // 計算總包數 = 每日頻率 × 天數
             const totalPacks = frequency * days;
 
             // 藥材吸水係數
