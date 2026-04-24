@@ -563,10 +563,112 @@
     </style>
 </head>
 <body>
+    <!-- 登入頁面 -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <p class="subtitle-small">台中慈濟醫院藥學部</p>
+                <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+            </div>
+            <div class="login-content">
+                <div class="section-title">🔐 員工登入</div>
+                <div class="input-group">
+                    <label style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">員工編號</label>
+                    <input type="text" id="employeeId" placeholder="請輸入員工編號" maxlength="20" style="font-size: 20px; padding: 16px; text-align: center; font-weight: 600; letter-spacing: 1px;">
+                </div>
+                <button onclick="login()" style="width: 100%; padding: 16px; background: #2C5F2D; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 15px;">
+                    ✓ 登入系統
+                </button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="javascript:void(0)" onclick="showAdminLogin()" style="color: #666; font-size: 13px; text-decoration: none;">管理員查詢 →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理員登入頁面 -->
+    <div id="adminLoginPage" class="login-page" style="display: none;">
+        <div class="login-container">
+            <div class="login-header">
+                <p class="subtitle-small">台中慈濟醫院藥學部</p>
+                <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+            </div>
+            <div class="login-content">
+                <div class="section-title">👤 管理員登入</div>
+                <div class="input-group">
+                    <label style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">帳號</label>
+                    <input type="text" id="adminAccount" placeholder="請輸入管理員帳號" style="font-size: 18px; padding: 14px; text-align: center;">
+                </div>
+                <div class="input-group">
+                    <label style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">密碼</label>
+                    <input type="password" id="adminPassword" placeholder="請輸入密碼" style="font-size: 18px; padding: 14px; text-align: center;">
+                </div>
+                <button onclick="adminLogin()" style="width: 100%; padding: 16px; background: #2C5F2D; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 15px;">
+                    ✓ 登入查詢
+                </button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="javascript:void(0)" onclick="backToLogin()" style="color: #666; font-size: 13px; text-decoration: none;">← 返回員工登入</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理員統計頁面 -->
+    <div id="adminPage" class="login-page" style="display: none;">
+        <div class="container" style="max-width: 1000px; margin: 30px auto;">
+            <div class="header">
+                <p class="subtitle-small">台中慈濟醫院藥學部</p>
+                <h1>「好媳婦」使用統計</h1>
+            </div>
+            <div class="content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <div>
+                            <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">開始日期</label>
+                            <input type="date" id="startDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">結束日期</label>
+                            <input type="date" id="endDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <button onclick="filterStats()" style="padding: 9px 20px; background: #2C5F2D; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                            🔍 篩選
+                        </button>
+                        <button onclick="resetFilter()" style="padding: 9px 20px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                            ↺ 全部
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 18px;">
+                        <button onclick="exportCSV()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                            📥 匯出CSV
+                        </button>
+                        <button onclick="logout()" style="padding: 9px 20px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                            登出
+                        </button>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">📊 使用次數統計</div>
+                    <div id="statsContent" style="margin-top: 15px;">
+                        <!-- 統計內容會動態插入 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要計算系統 -->
+    <div id="mainApp" style="display: none;">
     <div class="container">
         <div class="header">
             <p class="subtitle-small">台中慈濟醫院藥學部</p>
             <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+            <div style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 12px;">
+                <span style="font-size: 18px; font-weight: 700; opacity: 1; color: white;">👤 <span id="currentEmployeeDisplay">-</span></span>
+                <button onclick="employeeLogout()" style="padding: 4px 10px; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; font-size: 11px; cursor: pointer; transition: all 0.3s;">
+                    切換
+                </button>
+            </div>
         </div>
 
         <div class="content">
@@ -1258,6 +1360,351 @@
             if (e.key === 'Enter') calculate();
         });
 
+        // 修改calculate函數，加入使用記錄
+        const originalCalculate = calculate;
+        calculate = function() {
+            recordUsage();  // 記錄使用次數
+            return originalCalculate();
+        };
+
+    </script>
+
+    <style>
+        .login-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1B4D3E 0%, #2C5F2D 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, #1B4D3E 0%, #2C5F2D 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .login-header h1 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .login-header .subtitle-small {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 0 0 10px 0;
+        }
+
+        .login-content {
+            padding: 30px 25px;
+        }
+
+        @media (max-width: 600px) {
+            .login-header h1 {
+                font-size: 20px;
+            }
+            .login-content {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+
+    <script>
+        // 檢查是否已登入
+        window.onload = function() {
+            const savedEmployeeId = localStorage.getItem('employeeId');
+            if (savedEmployeeId) {
+                // 已登入，直接顯示主系統
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                window.currentEmployeeId = savedEmployeeId;
+                // 顯示當前登入員工編號
+                document.getElementById('currentEmployeeDisplay').textContent = savedEmployeeId;
+            }
+        };
+
+        // 員工登入
+        function login() {
+            const employeeId = document.getElementById('employeeId').value.trim();
+            
+            if (!employeeId) {
+                alert('請輸入員工編號！');
+                return;
+            }
+
+            // 儲存員工編號
+            localStorage.setItem('employeeId', employeeId);
+            window.currentEmployeeId = employeeId;
+
+            // 顯示當前登入員工編號
+            document.getElementById('currentEmployeeDisplay').textContent = employeeId;
+
+            // 隱藏登入頁面，顯示主系統
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+        }
+
+        // 顯示管理員登入
+        function showAdminLogin() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminLoginPage').style.display = 'flex';
+        }
+
+        // 返回員工登入
+        function backToLogin() {
+            document.getElementById('adminLoginPage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+        }
+
+        // 管理員登入
+        function adminLogin() {
+            const account = document.getElementById('adminAccount').value.trim();
+            const password = document.getElementById('adminPassword').value.trim();
+
+            // 驗證管理員帳號密碼
+            if (account === '000018371' && password === '2245') {
+                // 登入成功，顯示統計頁面
+                document.getElementById('adminLoginPage').style.display = 'none';
+                document.getElementById('adminPage').style.display = 'block';
+                loadStats();
+            } else {
+                alert('帳號或密碼錯誤！');
+            }
+        }
+
+        // 登出
+        function logout() {
+            document.getElementById('adminPage').style.display = 'none';
+            document.getElementById('adminAccount').value = '';
+            document.getElementById('adminPassword').value = '';
+            
+            // 檢查是否有儲存的員工編號
+            if (localStorage.getItem('employeeId')) {
+                document.getElementById('mainApp').style.display = 'block';
+            } else {
+                document.getElementById('loginPage').style.display = 'flex';
+            }
+        }
+
+        // 員工登出（切換帳號）
+        function employeeLogout() {
+            if (confirm('確定要切換帳號嗎？')) {
+                // 清除登入狀態
+                localStorage.removeItem('employeeId');
+                window.currentEmployeeId = null;
+
+                // 清空輸入欄位
+                document.getElementById('employeeId').value = '';
+
+                // 隱藏主系統，顯示登入頁面
+                document.getElementById('mainApp').style.display = 'none';
+                document.getElementById('loginPage').style.display = 'flex';
+            }
+        }
+
+        // 記錄使用次數
+        function recordUsage() {
+            if (!window.currentEmployeeId) return;
+
+            // 從 localStorage 讀取統計資料
+            let stats = JSON.parse(localStorage.getItem('usageStats') || '{}');
+            
+            // 記錄使用次數
+            if (!stats[window.currentEmployeeId]) {
+                stats[window.currentEmployeeId] = {
+                    count: 0,
+                    lastUsed: null,
+                    history: []  // 使用歷史記錄
+                };
+            }
+            
+            const now = new Date().toISOString();
+            stats[window.currentEmployeeId].count++;
+            stats[window.currentEmployeeId].lastUsed = now;
+            
+            // 記錄詳細的使用歷史
+            stats[window.currentEmployeeId].history.push({
+                timestamp: now,
+                date: new Date(now).toLocaleDateString('zh-TW'),
+                time: new Date(now).toLocaleTimeString('zh-TW')
+            });
+            
+            // 儲存回 localStorage
+            localStorage.setItem('usageStats', JSON.stringify(stats));
+        }
+
+        // 載入統計資料
+        function loadStats(startDate = null, endDate = null) {
+            const stats = JSON.parse(localStorage.getItem('usageStats') || '{}');
+            const statsContent = document.getElementById('statsContent');
+            
+            if (Object.keys(stats).length === 0) {
+                statsContent.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">尚無使用記錄</p>';
+                return;
+            }
+
+            // 處理日期篩選
+            let filteredStats = [];
+            Object.entries(stats).forEach(([id, data]) => {
+                let filteredHistory = data.history || [];
+                
+                // 如果有日期篩選
+                if (startDate || endDate) {
+                    filteredHistory = filteredHistory.filter(record => {
+                        const recordDate = new Date(record.timestamp);
+                        const start = startDate ? new Date(startDate) : null;
+                        const end = endDate ? new Date(endDate + 'T23:59:59') : null;
+                        
+                        if (start && end) {
+                            return recordDate >= start && recordDate <= end;
+                        } else if (start) {
+                            return recordDate >= start;
+                        } else if (end) {
+                            return recordDate <= end;
+                        }
+                        return true;
+                    });
+                }
+                
+                if (filteredHistory.length > 0) {
+                    filteredStats.push({
+                        employeeId: id,
+                        count: filteredHistory.length,
+                        lastUsed: filteredHistory[filteredHistory.length - 1].timestamp,
+                        history: filteredHistory
+                    });
+                }
+            });
+
+            if (filteredStats.length === 0) {
+                statsContent.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">此期間無使用記錄</p>';
+                return;
+            }
+
+            // 排序
+            filteredStats.sort((a, b) => b.count - a.count);
+
+            // 儲存當前篩選結果供匯出使用
+            window.currentFilteredStats = filteredStats;
+
+            // 生成表格
+            let html = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f5f5f5;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">員工編號</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">使用次數</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">最後使用時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            filteredStats.forEach((item, index) => {
+                const lastUsed = item.lastUsed ? new Date(item.lastUsed).toLocaleString('zh-TW') : '-';
+                const bgColor = index % 2 === 0 ? '#fff' : '#f9f9f9';
+                html += `
+                    <tr style="background: ${bgColor};">
+                        <td style="padding: 12px; border: 1px solid #ddd;">${item.employeeId}</td>
+                        <td style="padding: 12px; text-align: center; border: 1px solid #ddd; font-weight: 700; color: #2C5F2D;">${item.count}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; font-size: 13px; color: #666;">${lastUsed}</td>
+                    </tr>
+                `;
+            });
+
+            const totalCount = filteredStats.reduce((sum, item) => sum + item.count, 0);
+            const dateRangeText = (startDate || endDate) ? 
+                ` (${startDate || '起始'} ~ ${endDate || '現在'})` : '';
+
+            html += `
+                    </tbody>
+                </table>
+                <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; text-align: center;">
+                    <p style="margin: 0; color: #1565c0; font-size: 15px;">
+                        總使用次數：<strong style="font-size: 20px; color: #2C5F2D;">${totalCount}</strong> 次 | 
+                        使用人數：<strong style="font-size: 20px; color: #2C5F2D;">${filteredStats.length}</strong> 人
+                        ${dateRangeText}
+                    </p>
+                </div>
+            `;
+
+            statsContent.innerHTML = html;
+        }
+
+        // 篩選統計資料
+        function filterStats() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate && !endDate) {
+                alert('請至少選擇一個日期！');
+                return;
+            }
+            
+            if (startDate && endDate && startDate > endDate) {
+                alert('開始日期不能晚於結束日期！');
+                return;
+            }
+            
+            loadStats(startDate, endDate);
+        }
+
+        // 重置篩選
+        function resetFilter() {
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            loadStats();
+        }
+
+        // 匯出CSV
+        function exportCSV() {
+            const stats = window.currentFilteredStats || [];
+            
+            if (stats.length === 0) {
+                alert('沒有資料可匯出！');
+                return;
+            }
+
+            // 建立CSV內容（包含BOM以支援中文）
+            let csv = '\uFEFF';  // UTF-8 BOM
+            csv += '員工編號,使用日期,使用時間\n';
+            
+            // 展開每個使用記錄
+            stats.forEach(item => {
+                item.history.forEach(record => {
+                    csv += `${item.employeeId},${record.date},${record.time}\n`;
+                });
+            });
+
+            // 建立下載連結
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            const startDate = document.getElementById('startDate').value || '全部';
+            const endDate = document.getElementById('endDate').value || '全部';
+            const filename = `好媳婦使用統計_${startDate}_${endDate}_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '')}.csv`;
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
