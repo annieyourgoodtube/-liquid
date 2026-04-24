@@ -515,7 +515,7 @@
             }
             
             .header .subtitle-small {
-                font-size: 15px;
+                font-size: 26px;
             }
             
             .content {
@@ -574,18 +574,25 @@
                 <div class="section-title">員工編號</div>
                 <div style="background: #fff3cd; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #ff9800;">
                     <p style="margin: 0; color: #e65100; font-size: 13px; line-height: 1.6;">
-                        ⚠️ 請使用個人編號進行核對；若核對資訊有誤，個人統計將不予列計。
+                        ⚠️ 請登入正確的個人員編後方可執行；若個人輸入有誤，不列入個人統計自行負責。
                     </p>
                 </div>
                 <div class="input-group">
-                    <label style="font-size: 16px; font-weight: 600; margin-bottom: 10px;">員工編號</label>
                     <input type="text" id="employeeId" placeholder="請輸入員工編號" maxlength="20" style="font-size: 20px; padding: 16px; text-align: center; font-weight: 600; letter-spacing: 1px;">
                 </div>
                 <button onclick="login()" style="width: 100%; padding: 16px; background: #2C5F2D; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 15px;">
                     ✓ 登入系統
                 </button>
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
                     <a href="javascript:void(0)" onclick="showAdminLogin()" style="color: #666; font-size: 13px; text-decoration: none;">管理員查詢 →</a>
+                </div>
+                
+                <!-- Footer -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #666; font-size: 12px; line-height: 1.8;">
+                    <div style="margin-bottom: 6px;"><strong>指導：</strong>陳綺華 部主任・李雅蓁 主任</div>
+                    <div style="margin-bottom: 6px;"><strong>製作：</strong>許文馨・張雅婷</div>
+                    <div style="margin-bottom: 6px; color: #2C5F2D; font-weight: 600;">合心協力・精進專業</div>
+                    <div style="opacity: 0.6; font-size: 11px;">© 2026.04 All Rights Reserved</div>
                 </div>
             </div>
         </div>
@@ -611,8 +618,16 @@
                 <button onclick="adminLogin()" style="width: 100%; padding: 16px; background: #2C5F2D; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; margin-top: 15px;">
                     ✓ 登入查詢
                 </button>
-                <div style="text-align: center; margin-top: 20px;">
+                <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
                     <a href="javascript:void(0)" onclick="backToLogin()" style="color: #666; font-size: 13px; text-decoration: none;">← 返回員工登入</a>
+                </div>
+                
+                <!-- Footer -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #666; font-size: 12px; line-height: 1.8;">
+                    <div style="margin-bottom: 6px;"><strong>指導：</strong>陳綺華 部主任・李雅蓁 主任</div>
+                    <div style="margin-bottom: 6px;"><strong>製作：</strong>許文馨・張雅婷</div>
+                    <div style="margin-bottom: 6px; color: #2C5F2D; font-weight: 600;">合心協力・精進專業</div>
+                    <div style="opacity: 0.6; font-size: 11px;">© 2026.04 All Rights Reserved</div>
                 </div>
             </div>
         </div>
@@ -623,41 +638,90 @@
         <div class="container" style="max-width: 1000px; margin: 30px auto;">
             <div class="header">
                 <p class="subtitle-small">台中慈濟醫院藥學部</p>
-                <h1>「好媳婦」使用統計</h1>
+                <h1>「好媳婦」管理後台</h1>
             </div>
             <div class="content">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
-                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                        <div>
-                            <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">開始日期</label>
-                            <input type="date" id="startDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                <!-- Tab切換 -->
+                <div style="display: flex; gap: 0; margin-bottom: 20px; border-bottom: 2px solid #ddd;">
+                    <button id="statsTab" onclick="showTab('stats')" style="padding: 12px 30px; background: #2C5F2D; color: white; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 15px; font-weight: 700;">
+                        📊 使用統計
+                    </button>
+                    <button id="employeeTab" onclick="showTab('employee')" style="padding: 12px 30px; background: #f5f5f5; color: #666; border: none; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 15px; font-weight: 700;">
+                        👥 員工維護
+                    </button>
+                </div>
+
+                <!-- 使用統計頁面 -->
+                <div id="statsSection">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <div>
+                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">開始日期</label>
+                                <input type="date" id="startDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">結束日期</label>
+                                <input type="date" id="endDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                            </div>
+                            <button onclick="filterStats()" style="padding: 9px 20px; background: #2C5F2D; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                                🔍 篩選
+                            </button>
+                            <button onclick="resetFilter()" style="padding: 9px 20px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                                ↺ 全部
+                            </button>
                         </div>
-                        <div>
-                            <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">結束日期</label>
-                            <input type="date" id="endDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        <div style="display: flex; gap: 10px; margin-top: 18px;">
+                            <button onclick="exportCSV()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                📥 匯出CSV
+                            </button>
+                            <button onclick="logout()" style="padding: 9px 20px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                登出
+                            </button>
                         </div>
-                        <button onclick="filterStats()" style="padding: 9px 20px; background: #2C5F2D; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
-                            🔍 篩選
-                        </button>
-                        <button onclick="resetFilter()" style="padding: 9px 20px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
-                            ↺ 全部
-                        </button>
                     </div>
-                    <div style="display: flex; gap: 10px; margin-top: 18px;">
-                        <button onclick="exportCSV()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                            📥 匯出CSV
-                        </button>
+                    <div class="section">
+                        <div class="section-title">📊 使用次數統計</div>
+                        <div id="statsContent" style="margin-top: 15px;">
+                            <!-- 統計內容會動態插入 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 員工維護頁面 -->
+                <div id="employeeSection" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div>
+                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">員工編號</label>
+                                <input type="text" id="newEmployeeId" placeholder="請輸入員工編號" maxlength="20" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; width: 150px;">
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">姓名</label>
+                                <input type="text" id="newEmployeeName" placeholder="請輸入姓名" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; width: 120px;">
+                            </div>
+                            <button onclick="addEmployee()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                ➕ 新增
+                            </button>
+                        </div>
                         <button onclick="logout()" style="padding: 9px 20px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
                             登出
                         </button>
                     </div>
-                </div>
-                <div class="section">
-                    <div class="section-title">📊 使用次數統計</div>
-                    <div id="statsContent" style="margin-top: 15px;">
-                        <!-- 統計內容會動態插入 -->
+                    <div class="section">
+                        <div class="section-title">👥 員工名單 (<span id="employeeCount">0</span>人)</div>
+                        <div id="employeeListContent" style="margin-top: 15px;">
+                            <!-- 員工清單會動態插入 -->
+                        </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Footer -->
+            <div style="margin-top: 40px; padding: 25px 30px; background: #f8f9fa; border-top: 2px solid #2C5F2D; text-align: center;">
+                <div style="margin-bottom: 8px; color: #333; font-size: 14px;"><strong>指導：</strong>陳綺華 部主任・李雅蓁 主任</div>
+                <div style="margin-bottom: 8px; color: #333; font-size: 14px;"><strong>製作：</strong>許文馨・張雅婷</div>
+                <div style="margin-bottom: 10px; color: #2C5F2D; font-size: 15px; font-weight: 600;">合心協力・精進專業</div>
+                <div style="color: #999; font-size: 12px;">© 2026.04 All Rights Reserved</div>
             </div>
         </div>
     </div>
@@ -668,10 +732,13 @@
         <div class="header">
             <p class="subtitle-small">台中慈濟醫院藥學部</p>
             <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
-            <div style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 12px;">
-                <span style="font-size: 18px; font-weight: 700; opacity: 1; color: white;">👤 <span id="currentEmployeeDisplay">-</span></span>
-                <button onclick="employeeLogout()" style="padding: 4px 10px; background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; font-size: 11px; cursor: pointer; transition: all 0.3s;">
-                    切換
+            <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
+                <div style="display: flex; align-items: baseline; gap: 15px;">
+                    <span id="currentEmployeeId" style="font-size: 14px; font-weight: 600; opacity: 0.9; color: white;">000018371</span>
+                    <span id="currentEmployeeName" style="font-size: 32px; font-weight: 700; color: white; letter-spacing: 3px;">姓名</span>
+                </div>
+                <button onclick="employeeLogout()" style="padding: 10px 18px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                    登出切換
                 </button>
             </div>
         </div>
@@ -995,7 +1062,7 @@
             <strong>指導：</strong>陳綺華 部主任・李雅蓁 主任
         </div>
         <div class="footer-credit production">
-            <strong>製作：</strong>張雅婷・許文馨
+            <strong>製作：</strong>許文馨・張雅婷
         </div>
         <div class="footer-motto">
             合心協力・精進專業
@@ -1430,16 +1497,161 @@
     <script>
         // 檢查是否已登入
         window.onload = function() {
+            // 初始化預設員工資料（如果還沒有）
+            initializeEmployeeList();
+            
             const savedEmployeeId = localStorage.getItem('employeeId');
             if (savedEmployeeId) {
                 // 已登入，直接顯示主系統
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 window.currentEmployeeId = savedEmployeeId;
-                // 顯示當前登入員工編號
-                document.getElementById('currentEmployeeDisplay').textContent = savedEmployeeId;
+                // 顯示當前登入員工編號和姓名
+                updateCurrentEmployeeDisplay(savedEmployeeId);
             }
         };
+
+        // 初始化預設員工清單
+        function initializeEmployeeList() {
+            let employees = JSON.parse(localStorage.getItem('employeeList') || 'null');
+            
+            // 如果還沒有員工資料，載入預設資料
+            if (!employees) {
+                employees = {
+                    "000003201": "莊清祥",
+                    "000005512": "劉怡青",
+                    "000006502": "陳冠佑",
+                    "000007159": "張紀卿",
+                    "000007187": "陳綺華",
+                    "000007252": "張靜怡",
+                    "000007756": "蕭亦庭",
+                    "000008042": "陳建全",
+                    "000008134": "李雅蓁",
+                    "000009237": "胡仁珍",
+                    "000012089": "林欽淵",
+                    "000012891": "陳辰芳",
+                    "000013294": "蘇民傑",
+                    "000013696": "王雅萍",
+                    "000015486": "許登揚",
+                    "000016181": "陳玫舒",
+                    "000016419": "黃湘容",
+                    "000016923": "邱美雅",
+                    "000017964": "林君蔓",
+                    "000018137": "洪志豪",
+                    "000018143": "邱柔雯",
+                    "000018371": "許文馨",
+                    "000018888": "謝蕙霞",
+                    "000019052": "賴欣君",
+                    "000019714": "林順治",
+                    "000020130": "胡家瑜",
+                    "000021091": "林建志",
+                    "000023133": "林詩怡",
+                    "000023276": "鄧鈞庭",
+                    "000023408": "張雅媛",
+                    "000025740": "林心瑜",
+                    "000026309": "林燕萍",
+                    "000026314": "李家豪",
+                    "000026431": "沈逸婷",
+                    "000026998": "何曉嫻",
+                    "000027132": "趙崇勝",
+                    "000027273": "王子宸",
+                    "000027440": "楊家榮",
+                    "000028056": "洪培原",
+                    "000028372": "李宛怡",
+                    "000028771": "蔡淨嚴",
+                    "000030130": "徐千惠",
+                    "000030713": "李鎧宏",
+                    "000030768": "朱怡蓁",
+                    "000031305": "陳羿勳",
+                    "000032692": "李孟謙",
+                    "000032806": "鄭群譯",
+                    "000033260": "朱弈緬",
+                    "000033284": "李庭逸",
+                    "000033745": "陳詩韻",
+                    "000034796": "王芷翎",
+                    "000036670": "沈凡意",
+                    "000036671": "陳佩姍",
+                    "000037039": "郭芳瑜",
+                    "000037461": "李思嫺",
+                    "000037740": "李芝綺",
+                    "000038196": "阮祥豪",
+                    "000038514": "池俊弘",
+                    "000038687": "廖暄旻",
+                    "000039239": "余積修",
+                    "000039485": "張雅婷",
+                    "000039561": "李宥榛",
+                    "000039633": "陳泓佑",
+                    "000039718": "張鑑宏",
+                    "000039996": "陳盈蓁",
+                    "000039997": "陳合慶",
+                    "000040303": "林倍如",
+                    "000040891": "李紀賢",
+                    "000040992": "王皓儀",
+                    "000041059": "施瑢家",
+                    "000041179": "羅如海",
+                    "000041260": "張耀文",
+                    "000041535": "林怡菁",
+                    "000041686": "陳毓如",
+                    "000041918": "童淨安",
+                    "000042163": "詹承彥",
+                    "000042164": "黃于軒",
+                    "000042717": "王皓平",
+                    "000043188": "李柏昕",
+                    "000043450": "黃筱婷",
+                    "000043451": "湯霈馨",
+                    "000043452": "吳展榕",
+                    "000043491": "林絮筠",
+                    "000043695": "李翎菲",
+                    "000044272": "林宗義",
+                    "000044308": "徐楷柔",
+                    "000044548": "劉瑞恩",
+                    "000044847": "周恢慈",
+                    "000045603": "陳怡㚬",
+                    "000045723": "賴婷筠",
+                    "000045724": "黃緯軒",
+                    "000045829": "邱譯平",
+                    "000045830": "陳伃萱",
+                    "000045866": "吳家蓉",
+                    "000045867": "吳咸蓉",
+                    "000045868": "林芷安",
+                    "000046154": "張文豪",
+                    "000046167": "黃千恬",
+                    "000046479": "傅琮翔",
+                    "000046573": "林兪均",
+                    "000046574": "劉崇瑜"
+                };
+                localStorage.setItem('employeeList', JSON.stringify(employees));
+            }
+        }
+
+        // 更新當前登入員工顯示（編號+姓名）
+        function updateCurrentEmployeeDisplay(employeeId) {
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            const name = employees[employeeId] || '未登記';
+            document.getElementById('currentEmployeeId').textContent = employeeId;
+            document.getElementById('currentEmployeeName').textContent = name;
+        }
+
+        // Tab切換
+        function showTab(tab) {
+            if (tab === 'stats') {
+                document.getElementById('statsSection').style.display = 'block';
+                document.getElementById('employeeSection').style.display = 'none';
+                document.getElementById('statsTab').style.background = '#2C5F2D';
+                document.getElementById('statsTab').style.color = 'white';
+                document.getElementById('employeeTab').style.background = '#f5f5f5';
+                document.getElementById('employeeTab').style.color = '#666';
+                loadStats();
+            } else {
+                document.getElementById('statsSection').style.display = 'none';
+                document.getElementById('employeeSection').style.display = 'block';
+                document.getElementById('statsTab').style.background = '#f5f5f5';
+                document.getElementById('statsTab').style.color = '#666';
+                document.getElementById('employeeTab').style.background = '#2C5F2D';
+                document.getElementById('employeeTab').style.color = 'white';
+                loadEmployeeList();
+            }
+        }
 
         // 員工登入
         function login() {
@@ -1454,8 +1666,8 @@
             localStorage.setItem('employeeId', employeeId);
             window.currentEmployeeId = employeeId;
 
-            // 顯示當前登入員工編號
-            document.getElementById('currentEmployeeDisplay').textContent = employeeId;
+            // 顯示當前登入員工編號和姓名
+            updateCurrentEmployeeDisplay(employeeId);
 
             // 隱藏登入頁面，顯示主系統
             document.getElementById('loginPage').style.display = 'none';
@@ -1709,6 +1921,104 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // ===== 員工維護功能 =====
+        
+        // 載入員工清單
+        function loadEmployeeList() {
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            const employeeListContent = document.getElementById('employeeListContent');
+            const employeeCount = document.getElementById('employeeCount');
+            
+            const sortedEmployees = Object.entries(employees).sort((a, b) => a[0].localeCompare(b[0]));
+            employeeCount.textContent = sortedEmployees.length;
+            
+            if (sortedEmployees.length === 0) {
+                employeeListContent.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">尚無員工資料</p>';
+                return;
+            }
+
+            let html = `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f5f5f5;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; width: 150px;">員工編號</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">姓名</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; width: 100px;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            sortedEmployees.forEach(([id, name], index) => {
+                const bgColor = index % 2 === 0 ? '#fff' : '#f9f9f9';
+                html += `
+                    <tr style="background: ${bgColor};">
+                        <td style="padding: 12px; border: 1px solid #ddd; font-family: 'Arial', sans-serif;">${id}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">${name}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+                            <button onclick="deleteEmployee('${id}')" style="padding: 5px 12px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            employeeListContent.innerHTML = html;
+        }
+
+        // 新增員工
+        function addEmployee() {
+            const id = document.getElementById('newEmployeeId').value.trim();
+            const name = document.getElementById('newEmployeeName').value.trim();
+            
+            if (!id) {
+                alert('請輸入員工編號！');
+                return;
+            }
+            
+            if (!name) {
+                alert('請輸入姓名！');
+                return;
+            }
+            
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            
+            if (employees[id]) {
+                alert('此員工編號已存在！');
+                return;
+            }
+            
+            employees[id] = name;
+            localStorage.setItem('employeeList', JSON.stringify(employees));
+            
+            // 清空輸入欄位
+            document.getElementById('newEmployeeId').value = '';
+            document.getElementById('newEmployeeName').value = '';
+            
+            // 重新載入清單
+            loadEmployeeList();
+            
+            alert(`已新增：${id} - ${name}`);
+        }
+
+        // 刪除員工
+        function deleteEmployee(id) {
+            if (!confirm(`確定要刪除員工編號 ${id} 嗎？`)) {
+                return;
+            }
+            
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            delete employees[id];
+            localStorage.setItem('employeeList', JSON.stringify(employees));
+            
+            // 重新載入清單
+            loadEmployeeList();
+            
+            alert('已刪除');
         }
     </script>
 </body>
