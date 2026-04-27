@@ -579,7 +579,14 @@
         <div class="login-container">
             <div class="login-header">
                 <p class="subtitle-small">台中慈濟醫院藥學部</p>
-                <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div style="font-size: 56px; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 8px; letter-spacing: 6px;">
+                        「好媳婦」💚
+                    </div>
+                    <div style="font-size: 22px; font-weight: 600; color: white; opacity: 0.95;">
+                        中藥煎煮水量計算系統
+                    </div>
+                </div>
             </div>
             <div class="login-content">
                 <div class="section-title">員工編號</div>
@@ -614,7 +621,14 @@
         <div class="login-container">
             <div class="login-header">
                 <p class="subtitle-small">台中慈濟醫院藥學部</p>
-                <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div style="font-size: 56px; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 8px; letter-spacing: 6px;">
+                        「好媳婦」💚
+                    </div>
+                    <div style="font-size: 22px; font-weight: 600; color: white; opacity: 0.95;">
+                        中藥煎煮水量計算系統
+                    </div>
+                </div>
             </div>
             <div class="login-content">
                 <div class="section-title">👤 管理員登入</div>
@@ -742,7 +756,14 @@
     <div class="container">
         <div class="header">
             <p class="subtitle-small">台中慈濟醫院藥學部</p>
-            <h1>「好媳婦」：中藥煎煮水量計算系統</h1>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 72px; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 5px; letter-spacing: 8px;">
+                    「好媳婦」💚
+                </div>
+                <div style="font-size: 28px; font-weight: 600; color: white; opacity: 0.95;">
+                    中藥煎煮水量計算系統
+                </div>
+            </div>
             <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
                 <div style="display: flex; align-items: baseline; gap: 15px;">
                     <span id="currentEmployeeId" style="font-size: 14px; font-weight: 600; opacity: 0.9; color: white;">000018371</span>
@@ -1063,6 +1084,13 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- 清空資料按鈕 -->
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px dashed #ddd;">
+                    <button onclick="clearForm()" style="background: linear-gradient(135deg, #757575 0%, #616161 100%); color: white; border: none; padding: 16px 40px; border-radius: 10px; font-size: 20px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.3s;">
+                        🔄 清空資料・繼續下一筆計算
+                    </button>
                 </div>
             </div>
         </div>
@@ -1935,6 +1963,40 @@
         }
 
         // ===== 員工維護功能 =====
+        
+        // 清空表單，繼續下一筆計算
+        function clearForm() {
+            if (confirm('確定要清空所有資料嗎？')) {
+                // 重置所有輸入欄位
+                document.getElementById('frequency').value = '2';  // 預設BID
+                document.getElementById('days').value = '7';  // 預設7天
+                document.getElementById('waterPerPack').value = '100';  // 預設100ml
+                document.getElementById('herbWeight').value = '';  // 清空
+                document.getElementById('herbType').value = 'normal';  // 預設一般藥材
+                
+                // 隱藏特殊藥材區域
+                document.getElementById('specialHerbsSelectSection').style.display = 'none';
+                document.getElementById('specialHerbsWeightSection').style.display = 'none';
+                document.getElementById('ratioResultSection').style.display = 'none';
+                document.getElementById('herbInfoSection').style.display = 'block';
+                
+                // 清空所有勾選
+                document.querySelectorAll('input[name="specialHerb"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // 隱藏結果區域
+                document.getElementById('result').classList.remove('show');
+                
+                // 捲動到頁面頂部
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // 聚焦到藥材總重欄位
+                setTimeout(() => {
+                    document.getElementById('herbWeight').focus();
+                }, 500);
+            }
+        }
         
         // 載入員工清單
         function loadEmployeeList() {
