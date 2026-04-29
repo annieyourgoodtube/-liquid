@@ -724,6 +724,10 @@
                                 <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">姓名</label>
                                 <input type="text" id="newEmployeeName" placeholder="請輸入姓名" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; width: 120px;">
                             </div>
+                            <div style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #f8f9fa; border-radius: 5px;">
+                                <input type="checkbox" id="newEmployeeIsAdmin" style="width: 18px; height: 18px; cursor: pointer;">
+                                <label for="newEmployeeIsAdmin" style="font-size: 14px; color: #666; cursor: pointer; margin: 0;">主管</label>
+                            </div>
                             <button onclick="addEmployee()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
                                 ➕ 新增
                             </button>
@@ -1557,107 +1561,107 @@
             // 如果還沒有員工資料，載入預設資料
             if (!employees) {
                 employees = {
-                    "000003201": "莊清祥",
-                    "000005512": "劉怡青",
-                    "000006502": "陳冠佑",
-                    "000007159": "張紀卿",
-                    "000007187": "陳綺華",
-                    "000007252": "張靜怡",
-                    "000007756": "蕭亦庭",
-                    "000008042": "陳建全",
-                    "000008134": "李雅蓁",
-                    "000009237": "胡仁珍",
-                    "000012089": "林欽淵",
-                    "000012891": "陳辰芳",
-                    "000013294": "蘇民傑",
-                    "000013696": "王雅萍",
-                    "000015486": "許登揚",
-                    "000016181": "陳玫舒",
-                    "000016419": "黃湘容",
-                    "000016923": "邱美雅",
-                    "000017964": "林君蔓",
-                    "000018137": "洪志豪",
-                    "000018143": "邱柔雯",
-                    "000018371": "許文馨",
-                    "000018888": "謝蕙霞",
-                    "000019052": "賴欣君",
-                    "000019714": "林順治",
-                    "000020130": "胡家瑜",
-                    "000021091": "林建志",
-                    "000023133": "林詩怡",
-                    "000023276": "鄧鈞庭",
-                    "000023408": "張雅媛",
-                    "000025740": "林心瑜",
-                    "000026309": "林燕萍",
-                    "000026314": "李家豪",
-                    "000026431": "沈逸婷",
-                    "000026998": "何曉嫻",
-                    "000027132": "趙崇勝",
-                    "000027273": "王子宸",
-                    "000027440": "楊家榮",
-                    "000028056": "洪培原",
-                    "000028372": "李宛怡",
-                    "000028771": "蔡淨嚴",
-                    "000030130": "徐千惠",
-                    "000030713": "李鎧宏",
-                    "000030768": "朱怡蓁",
-                    "000031305": "陳羿勳",
-                    "000032692": "李孟謙",
-                    "000032806": "鄭群譯",
-                    "000033260": "朱弈緬",
-                    "000033284": "李庭逸",
-                    "000033745": "陳詩韻",
-                    "000034796": "王芷翎",
-                    "000036670": "沈凡意",
-                    "000036671": "陳佩姍",
-                    "000037039": "郭芳瑜",
-                    "000037461": "李思嫺",
-                    "000037740": "李芝綺",
-                    "000038196": "阮祥豪",
-                    "000038514": "池俊弘",
-                    "000038687": "廖暄旻",
-                    "000039239": "余積修",
-                    "000039485": "張雅婷",
-                    "000039561": "李宥榛",
-                    "000039633": "陳泓佑",
-                    "000039718": "張鑑宏",
-                    "000039996": "陳盈蓁",
-                    "000039997": "陳合慶",
-                    "000040303": "林倍如",
-                    "000040891": "李紀賢",
-                    "000040992": "王皓儀",
-                    "000041059": "施瑢家",
-                    "000041179": "羅如海",
-                    "000041260": "張耀文",
-                    "000041535": "林怡菁",
-                    "000041686": "陳毓如",
-                    "000041918": "童淨安",
-                    "000042163": "詹承彥",
-                    "000042164": "黃于軒",
-                    "000042717": "王皓平",
-                    "000043188": "李柏昕",
-                    "000043450": "黃筱婷",
-                    "000043451": "湯霈馨",
-                    "000043452": "吳展榕",
-                    "000043491": "林絮筠",
-                    "000043695": "李翎菲",
-                    "000044272": "林宗義",
-                    "000044308": "徐楷柔",
-                    "000044548": "劉瑞恩",
-                    "000044847": "周恢慈",
-                    "000045603": "陳怡㚬",
-                    "000045723": "賴婷筠",
-                    "000045724": "黃緯軒",
-                    "000045829": "邱譯平",
-                    "000045830": "陳伃萱",
-                    "000045866": "吳家蓉",
-                    "000045867": "吳咸蓉",
-                    "000045868": "林芷安",
-                    "000046154": "張文豪",
-                    "000046167": "黃千恬",
-                    "000046479": "傅琮翔",
-                    "000046573": "林兪均",
-                    "000046574": "劉崇瑜"
+                    "000003201": { name: "莊清祥", isAdmin: false },
+                    "000005512": { name: "劉怡青", isAdmin: false },
+                    "000006502": { name: "陳冠佑", isAdmin: false },
+                    "000007159": { name: "張紀卿", isAdmin: false },
+                    "000007187": { name: "陳綺華", isAdmin: false },
+                    "000007252": { name: "張靜怡", isAdmin: false },
+                    "000007756": { name: "蕭亦庭", isAdmin: false },
+                    "000008042": { name: "陳建全", isAdmin: false },
+                    "000008134": { name: "李雅蓁", isAdmin: true },  // 主管
+                    "000009237": { name: "胡仁珍", isAdmin: false },
+                    "000012089": { name: "林欽淵", isAdmin: false },
+                    "000012891": { name: "陳辰芳", isAdmin: false },
+                    "000013294": { name: "蘇民傑", isAdmin: false },
+                    "000013696": { name: "王雅萍", isAdmin: false },
+                    "000015486": { name: "許登揚", isAdmin: false },
+                    "000016181": { name: "陳玫舒", isAdmin: false },
+                    "000016419": { name: "黃湘容", isAdmin: false },
+                    "000016923": { name: "邱美雅", isAdmin: false },
+                    "000017964": { name: "林君蔓", isAdmin: false },
+                    "000018137": { name: "洪志豪", isAdmin: false },
+                    "000018143": { name: "邱柔雯", isAdmin: false },
+                    "000018371": { name: "許文馨", isAdmin: true },  // 主管
+                    "000018888": { name: "謝蕙霞", isAdmin: false },
+                    "000019052": { name: "賴欣君", isAdmin: false },
+                    "000019714": { name: "林順治", isAdmin: false },
+                    "000020130": { name: "胡家瑜", isAdmin: false },
+                    "000021091": { name: "林建志", isAdmin: false },
+                    "000023133": { name: "林詩怡", isAdmin: false },
+                    "000023276": { name: "鄧鈞庭", isAdmin: false },
+                    "000023408": { name: "張雅媛", isAdmin: false },
+                    "000025740": { name: "林心瑜", isAdmin: false },
+                    "000026309": { name: "林燕萍", isAdmin: false },
+                    "000026314": { name: "李家豪", isAdmin: false },
+                    "000026431": { name: "沈逸婷", isAdmin: false },
+                    "000026998": { name: "何曉嫻", isAdmin: false },
+                    "000027132": { name: "趙崇勝", isAdmin: false },
+                    "000027273": { name: "王子宸", isAdmin: false },
+                    "000027440": { name: "楊家榮", isAdmin: false },
+                    "000028056": { name: "洪培原", isAdmin: false },
+                    "000028372": { name: "李宛怡", isAdmin: false },
+                    "000028771": { name: "蔡淨嚴", isAdmin: false },
+                    "000030130": { name: "徐千惠", isAdmin: false },
+                    "000030713": { name: "李鎧宏", isAdmin: false },
+                    "000030768": { name: "朱怡蓁", isAdmin: false },
+                    "000031305": { name: "陳羿勳", isAdmin: false },
+                    "000032692": { name: "李孟謙", isAdmin: false },
+                    "000032806": { name: "鄭群譯", isAdmin: false },
+                    "000033260": { name: "朱弈緬", isAdmin: false },
+                    "000033284": { name: "李庭逸", isAdmin: false },
+                    "000033745": { name: "陳詩韻", isAdmin: false },
+                    "000034796": { name: "王芷翎", isAdmin: false },
+                    "000036670": { name: "沈凡意", isAdmin: false },
+                    "000036671": { name: "陳佩姍", isAdmin: false },
+                    "000037039": { name: "郭芳瑜", isAdmin: false },
+                    "000037461": { name: "李思嫺", isAdmin: false },
+                    "000037740": { name: "李芝綺", isAdmin: false },
+                    "000038196": { name: "阮祥豪", isAdmin: false },
+                    "000038514": { name: "池俊弘", isAdmin: false },
+                    "000038687": { name: "廖暄旻", isAdmin: false },
+                    "000039239": { name: "余積修", isAdmin: false },
+                    "000039485": { name: "張雅婷", isAdmin: true },  // 主管
+                    "000039561": { name: "李宥榛", isAdmin: false },
+                    "000039633": { name: "陳泓佑", isAdmin: false },
+                    "000039718": { name: "張鑑宏", isAdmin: false },
+                    "000039996": { name: "陳盈蓁", isAdmin: false },
+                    "000039997": { name: "陳合慶", isAdmin: false },
+                    "000040303": { name: "林倍如", isAdmin: false },
+                    "000040891": { name: "李紀賢", isAdmin: false },
+                    "000040992": { name: "王皓儀", isAdmin: false },
+                    "000041059": { name: "施瑢家", isAdmin: false },
+                    "000041179": { name: "羅如海", isAdmin: false },
+                    "000041260": { name: "張耀文", isAdmin: false },
+                    "000041535": { name: "林怡菁", isAdmin: false },
+                    "000041686": { name: "陳毓如", isAdmin: false },
+                    "000041918": { name: "童淨安", isAdmin: false },
+                    "000042163": { name: "詹承彥", isAdmin: false },
+                    "000042164": { name: "黃于軒", isAdmin: false },
+                    "000042717": { name: "王皓平", isAdmin: false },
+                    "000043188": { name: "李柏昕", isAdmin: false },
+                    "000043450": { name: "黃筱婷", isAdmin: false },
+                    "000043451": { name: "湯霈馨", isAdmin: false },
+                    "000043452": { name: "吳展榕", isAdmin: false },
+                    "000043491": { name: "林絮筠", isAdmin: false },
+                    "000043695": { name: "李翎菲", isAdmin: false },
+                    "000044272": { name: "林宗義", isAdmin: false },
+                    "000044308": { name: "徐楷柔", isAdmin: false },
+                    "000044548": { name: "劉瑞恩", isAdmin: false },
+                    "000044847": { name: "周恢慈", isAdmin: false },
+                    "000045603": { name: "陳怡㚬", isAdmin: false },
+                    "000045723": { name: "賴婷筠", isAdmin: false },
+                    "000045724": { name: "黃緯軒", isAdmin: false },
+                    "000045829": { name: "邱譯平", isAdmin: false },
+                    "000045830": { name: "陳伃萱", isAdmin: false },
+                    "000045866": { name: "吳家蓉", isAdmin: false },
+                    "000045867": { name: "吳咸蓉", isAdmin: false },
+                    "000045868": { name: "林芷安", isAdmin: false },
+                    "000046154": { name: "張文豪", isAdmin: false },
+                    "000046167": { name: "黃千恬", isAdmin: false },
+                    "000046479": { name: "傅琮翔", isAdmin: false },
+                    "000046573": { name: "林兪均", isAdmin: false },
+                    "000046574": { name: "劉崇瑜", isAdmin: false }
                 };
                 localStorage.setItem('employeeList', JSON.stringify(employees));
             }
@@ -1666,7 +1670,8 @@
         // 更新當前登入員工顯示（編號+姓名）
         function updateCurrentEmployeeDisplay(employeeId) {
             const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
-            const name = employees[employeeId] || '未登記';
+            const employeeData = employees[employeeId];
+            const name = employeeData ? (employeeData.name || employeeData) : '未登記';
             document.getElementById('currentEmployeeId').textContent = employeeId;
             document.getElementById('currentEmployeeName').textContent = name;
         }
@@ -1730,13 +1735,18 @@
             const account = document.getElementById('adminAccount').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
 
-            // 驗證管理員帳號密碼（3位管理員）
-            const validAdmins = [
-                { account: '000018371', password: 'boss' },  // 許文馨
-                { account: '000008134', password: 'boss' },  // 李雅蓁
-                { account: '000039485', password: 'boss' }   // 張雅婷
-            ];
+            // 從員工清單中讀取所有主管
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            const validAdmins = [];
             
+            Object.entries(employees).forEach(([id, data]) => {
+                const employeeData = typeof data === 'string' ? { name: data, isAdmin: false } : data;
+                if (employeeData.isAdmin) {
+                    validAdmins.push({ account: id, password: 'boss' });
+                }
+            });
+            
+            // 檢查是否為有效的主管帳號且密碼正確
             const isValid = validAdmins.some(admin => 
                 admin.account === account && admin.password === password
             );
@@ -2026,20 +2036,30 @@
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr style="background: #f5f5f5;">
-                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; width: 150px;">員工編號</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd; width: 140px;">員工編號</th>
                             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">姓名</th>
+                            <th style="padding: 12px; text-align: center; border: 1px solid #ddd; width: 80px;">主管</th>
                             <th style="padding: 12px; text-align: center; border: 1px solid #ddd; width: 100px;">操作</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
-            sortedEmployees.forEach(([id, name], index) => {
+            sortedEmployees.forEach(([id, data], index) => {
+                const employeeData = typeof data === 'string' ? { name: data, isAdmin: false } : data;
+                const name = employeeData.name || data;
+                const isAdmin = employeeData.isAdmin || false;
                 const bgColor = index % 2 === 0 ? '#fff' : '#f9f9f9';
+                
                 html += `
                     <tr style="background: ${bgColor};">
                         <td style="padding: 12px; border: 1px solid #ddd; font-family: 'Arial', sans-serif;">${id}</td>
                         <td style="padding: 12px; border: 1px solid #ddd;">${name}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
+                            <input type="checkbox" ${isAdmin ? 'checked' : ''} 
+                                   onchange="toggleAdmin('${id}', this.checked)" 
+                                   style="width: 18px; height: 18px; cursor: pointer;">
+                        </td>
                         <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
                             <button onclick="deleteEmployee('${id}')" style="padding: 5px 12px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">
                                 刪除
@@ -2057,6 +2077,7 @@
         function addEmployee() {
             const id = document.getElementById('newEmployeeId').value.trim();
             const name = document.getElementById('newEmployeeName').value.trim();
+            const isAdmin = document.getElementById('newEmployeeIsAdmin').checked;
             
             if (!id) {
                 alert('請輸入員工編號！');
@@ -2075,17 +2096,55 @@
                 return;
             }
             
-            employees[id] = name;
+            employees[id] = { name: name, isAdmin: isAdmin };
             localStorage.setItem('employeeList', JSON.stringify(employees));
+            
+            // 如果設為主管，更新管理員登入驗證
+            if (isAdmin) {
+                updateAdminLogin();
+            }
             
             // 清空輸入欄位
             document.getElementById('newEmployeeId').value = '';
             document.getElementById('newEmployeeName').value = '';
+            document.getElementById('newEmployeeIsAdmin').checked = false;
             
             // 重新載入清單
             loadEmployeeList();
             
-            alert(`已新增：${id} - ${name}`);
+            const adminText = isAdmin ? ' (主管)' : '';
+            alert(`已新增：${id} - ${name}${adminText}`);
+        }
+
+        // 切換主管狀態
+        function toggleAdmin(employeeId, isAdmin) {
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            
+            if (!employees[employeeId]) return;
+            
+            // 確保資料結構正確
+            if (typeof employees[employeeId] === 'string') {
+                employees[employeeId] = { 
+                    name: employees[employeeId], 
+                    isAdmin: isAdmin 
+                };
+            } else {
+                employees[employeeId].isAdmin = isAdmin;
+            }
+            
+            localStorage.setItem('employeeList', JSON.stringify(employees));
+            
+            // 更新管理員登入驗證
+            updateAdminLogin();
+            
+            const statusText = isAdmin ? '設為主管' : '取消主管';
+            console.log(`${employeeId} 已${statusText}`);
+        }
+
+        // 更新管理員登入驗證（動態生成）
+        function updateAdminLogin() {
+            // 這個函數在 adminLogin() 中會動態讀取員工資料
+            // 所以不需要額外處理
         }
 
         // 刪除員工
