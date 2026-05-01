@@ -1841,7 +1841,6 @@
                 // 登入成功，顯示統計頁面
                 document.getElementById('adminLoginPage').style.display = 'none';
                 document.getElementById('adminPage').style.display = 'block';
-                initSheetsUrl();  // 初始化試算表網址
             } else {
                 alert('帳號或密碼錯誤！');
             }
@@ -1911,14 +1910,24 @@
             sendToGoogleSheets(window.currentEmployeeId, now);
         }
 
+        // ═══════════════════════════════════════════════════════
+        // Google Sheets 設定區
+        // ═══════════════════════════════════════════════════════
+        
+        // Google Apps Script 網址（用於寫入資料）
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9CwTQLlwjxBLtrtYwJ21G6DZaNzqSEEPkXjPfCtlMBvoiMj-bbw6I90bzHJhqcFA/exec';
+        
+        // Google 試算表網址（用於查看統計）
+        // 請將下方網址替換為您的試算表網址
+        const GOOGLE_SHEETS_VIEW_URL = 'YOUR_GOOGLE_SHEETS_URL_HERE';
+        // 範例：'https://docs.google.com/spreadsheets/d/1abc...xyz/edit'
+        
+        // ═══════════════════════════════════════════════════════
+
         // 送資料到 Google Sheets
         function sendToGoogleSheets(employeeId, timestamp) {
-            // Google Apps Script Web App URL
-            // 請替換成您的 Google Apps Script 網址
-            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9CwTQLlwjxBLtrtYwJ21G6DZaNzqSEEPkXjPfCtlMBvoiMj-bbw6I90bzHJhqcFA/exec';
-            
             // 檢查網址是否已設定（開發時的提示）
-            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
                 console.log('Google Sheets URL 尚未設定');
                 return;
             }
@@ -1936,7 +1945,7 @@
             };
             
             // 送出資料到 Google Sheets
-            fetch(SCRIPT_URL, {
+            fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -1954,24 +1963,14 @@
 
         // 開啟 Google Sheets
         function openGoogleSheets() {
-            const sheetsUrl = document.getElementById('sheetsUrl').value.trim();
-            
-            if (!sheetsUrl) {
-                alert('請先輸入 Google 試算表網址！');
+            // 檢查網址是否已設定
+            if (!GOOGLE_SHEETS_VIEW_URL || GOOGLE_SHEETS_VIEW_URL === 'YOUR_GOOGLE_SHEETS_URL_HERE') {
+                alert('請先在程式碼中設定 Google 試算表網址！\n\n請將 GOOGLE_SHEETS_VIEW_URL 設定為您的試算表網址。');
                 return;
             }
-            
-            // 檢查網址格式
-            if (!sheetsUrl.includes('docs.google.com/spreadsheets')) {
-                alert('請輸入正確的 Google 試算表網址！');
-                return;
-            }
-            
-            // 儲存網址供下次使用
-            localStorage.setItem('googleSheetsUrl', sheetsUrl);
             
             // 在新分頁開啟
-            window.open(sheetsUrl, '_blank');
+            window.open(GOOGLE_SHEETS_VIEW_URL, '_blank');
         }
         
         // 查看本機統計
@@ -1985,17 +1984,6 @@
         function backToStatsHome() {
             document.getElementById('statsSection').querySelector('div.section').style.display = 'block';
             document.getElementById('localStatsSection').style.display = 'none';
-        }
-        
-        // 初始化時載入儲存的試算表網址
-        function initSheetsUrl() {
-            const savedUrl = localStorage.getItem('googleSheetsUrl');
-            if (savedUrl) {
-                const urlInput = document.getElementById('sheetsUrl');
-                if (urlInput) {
-                    urlInput.value = savedUrl;
-                }
-            }
         }
 
         // 載入統計資料
