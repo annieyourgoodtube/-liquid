@@ -4,6 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>「好媳婦」：中藥煎煮水量計算系統</title>
+    <!--
+    ═══════════════════════════════════════════════════════════
+    Google Sheets 整合設定說明
+    ═══════════════════════════════════════════════════════════
+    
+    如需啟用 Google Sheets 中央統計功能，請依照以下步驟：
+    
+    1. 建立 Google 試算表
+    2. 開啟 Google Apps Script (工具 → 指令碼編輯器)
+    3. 貼上以下程式碼：
+    
+    ───────────────────────────────────────────────────────────
+    function doPost(e) {
+      var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+      var data = JSON.parse(e.postData.contents);
+      
+      sheet.appendRow([
+        data.employeeId,
+        data.employeeName,
+        data.date,
+        data.time,
+        data.timestamp
+      ]);
+      
+      return ContentService.createTextOutput(JSON.stringify({result: 'success'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    ───────────────────────────────────────────────────────────
+    
+    4. 部署為網路應用程式：
+       - 點擊「部署」→「新增部署作業」
+       - 類型：網路應用程式
+       - 執行身分：我
+       - 存取權：任何人
+       - 複製網址
+    
+    5. 將網址貼到下方 SCRIPT_URL 變數中
+    
+    6. Google 試算表欄位設定：
+       A欄：員工編號
+       B欄：員工姓名
+       C欄：日期
+       D欄：時間
+       E欄：時間戳記
+    
+    ═══════════════════════════════════════════════════════════
+    -->
     <style>
         * {
             margin: 0;
@@ -675,37 +722,84 @@
                 </div>
 
                 <!-- 使用統計頁面 -->
-                <div id="statsSection">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
-                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                            <div>
-                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">開始日期</label>
-                                <input type="date" id="startDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+<div id="statsSection">
+                    <div class="section" style="text-align: center; padding: 40px 20px;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📊</div>
+                        <h2 style="color: #2C5F2D; margin-bottom: 15px; font-size: 24px;">使用統計查詢</h2>
+                        <p style="color: #666; margin-bottom: 30px; font-size: 15px; line-height: 1.6;">
+                            所有使用紀錄已整合至 Google 試算表<br>
+                            點擊下方按鈕即可查看完整統計資料
+                        </p>
+                        
+                        <div style="margin-bottom: 30px;">
+                            <input type="text" id="sheetsUrl" placeholder="請輸入 Google 試算表網址" 
+                                   value=""
+                                   style="width: 80%; max-width: 600px; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
+                            <div style="font-size: 12px; color: #999; margin-top: 8px;">
+                                格式範例：https://docs.google.com/spreadsheets/d/你的試算表ID/edit
                             </div>
-                            <div>
-                                <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">結束日期</label>
-                                <input type="date" id="endDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
-                            </div>
-                            <button onclick="filterStats()" style="padding: 9px 20px; background: #2C5F2D; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
-                                🔍 篩選
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="openGoogleSheets()" style="padding: 14px 30px; background: linear-gradient(135deg, #0F9D58 0%, #0A7E3E 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3); transition: all 0.3s;">
+                                📊 開啟 Google 試算表統計
                             </button>
-                            <button onclick="resetFilter()" style="padding: 9px 20px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
-                                ↺ 全部
+                            
+                            <button onclick="viewLocalStats()" style="padding: 14px 30px; background: #757575; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+                                💾 查看本機統計
                             </button>
                         </div>
-                        <div style="display: flex; gap: 10px; margin-top: 18px;">
-                            <button onclick="exportCSV()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
-                                📥 匯出CSV
-                            </button>
-                            <button onclick="logout()" style="padding: 9px 20px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                        
+                        <div style="margin-top: 30px; padding: 20px; background: #f0f7f4; border-radius: 8px; border-left: 4px solid #2C5F2D;">
+                            <div style="font-size: 14px; color: #2C5F2D; font-weight: 600; margin-bottom: 8px;">💡 使用說明</div>
+                            <div style="font-size: 13px; color: #666; text-align: left; line-height: 1.8;">
+                                <strong>Google 試算表統計：</strong>顯示所有裝置、所有員工的完整使用紀錄（需設定試算表網址）<br>
+                                <strong>本機統計：</strong>僅顯示此電腦、此瀏覽器的使用紀錄
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px;">
+                            <button onclick="logout()" style="padding: 10px 24px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
                                 登出
                             </button>
                         </div>
                     </div>
-                    <div class="section">
-                        <div class="section-title">📊 使用次數統計</div>
-                        <div id="statsContent" style="margin-top: 15px;">
-                            <!-- 統計內容會動態插入 -->
+                    
+                    <!-- 本機統計區域（隱藏） -->
+                    <div id="localStatsSection" style="display: none;">
+                        <div style="margin-bottom: 20px;">
+                            <button onclick="backToStatsHome()" style="padding: 8px 16px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                ← 返回統計首頁
+                            </button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 10px; flex-wrap: wrap;">
+                            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                <div>
+                                    <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">開始日期</label>
+                                    <input type="date" id="startDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px; color: #666; margin-bottom: 3px; display: block;">結束日期</label>
+                                    <input type="date" id="endDate" style="padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                                </div>
+                                <button onclick="filterStats()" style="padding: 9px 20px; background: #2C5F2D; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                                    🔍 篩選
+                                </button>
+                                <button onclick="resetFilter()" style="padding: 9px 20px; background: #757575; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 18px;">
+                                    ↺ 全部
+                                </button>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 18px;">
+                                <button onclick="exportCSV()" style="padding: 9px 20px; background: #4CAF50; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
+                                    📥 匯出CSV
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="section-title">📊 本機使用次數統計</div>
+                            <div id="statsContent" style="margin-top: 15px;">
+                                <!-- 統計內容會動態插入 -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1747,7 +1841,7 @@
                 // 登入成功，顯示統計頁面
                 document.getElementById('adminLoginPage').style.display = 'none';
                 document.getElementById('adminPage').style.display = 'block';
-                loadStats();
+                initSheetsUrl();  // 初始化試算表網址
             } else {
                 alert('帳號或密碼錯誤！');
             }
@@ -1812,6 +1906,96 @@
             
             // 儲存回 localStorage
             localStorage.setItem('usageStats', JSON.stringify(stats));
+            
+            // 同時送到 Google Sheets
+            sendToGoogleSheets(window.currentEmployeeId, now);
+        }
+
+        // 送資料到 Google Sheets
+        function sendToGoogleSheets(employeeId, timestamp) {
+            // Google Apps Script Web App URL
+            // 請替換成您的 Google Apps Script 網址
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9CwTQLlwjxBLtrtYwJ21G6DZaNzqSEEPkXjPfCtlMBvoiMj-bbw6I90bzHJhqcFA/exec';
+            
+            // 檢查網址是否已設定（開發時的提示）
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.log('Google Sheets URL 尚未設定');
+                return;
+            }
+            
+            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            const employeeData = employees[employeeId];
+            const employeeName = employeeData ? (employeeData.name || employeeData) : '未知';
+            
+            const data = {
+                employeeId: employeeId,
+                employeeName: employeeName,
+                timestamp: timestamp,
+                date: new Date(timestamp).toLocaleDateString('zh-TW'),
+                time: new Date(timestamp).toLocaleTimeString('zh-TW')
+            };
+            
+            // 送出資料到 Google Sheets
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                console.log('使用紀錄已送至 Google Sheets');
+            })
+            .catch(error => {
+                console.error('送至 Google Sheets 失敗:', error);
+            });
+        }
+
+        // 開啟 Google Sheets
+        function openGoogleSheets() {
+            const sheetsUrl = document.getElementById('sheetsUrl').value.trim();
+            
+            if (!sheetsUrl) {
+                alert('請先輸入 Google 試算表網址！');
+                return;
+            }
+            
+            // 檢查網址格式
+            if (!sheetsUrl.includes('docs.google.com/spreadsheets')) {
+                alert('請輸入正確的 Google 試算表網址！');
+                return;
+            }
+            
+            // 儲存網址供下次使用
+            localStorage.setItem('googleSheetsUrl', sheetsUrl);
+            
+            // 在新分頁開啟
+            window.open(sheetsUrl, '_blank');
+        }
+        
+        // 查看本機統計
+        function viewLocalStats() {
+            document.getElementById('statsSection').querySelector('div.section').style.display = 'none';
+            document.getElementById('localStatsSection').style.display = 'block';
+            loadStats();
+        }
+        
+        // 返回統計首頁
+        function backToStatsHome() {
+            document.getElementById('statsSection').querySelector('div.section').style.display = 'block';
+            document.getElementById('localStatsSection').style.display = 'none';
+        }
+        
+        // 初始化時載入儲存的試算表網址
+        function initSheetsUrl() {
+            const savedUrl = localStorage.getItem('googleSheetsUrl');
+            if (savedUrl) {
+                const urlInput = document.getElementById('sheetsUrl');
+                if (urlInput) {
+                    urlInput.value = savedUrl;
+                }
+            }
         }
 
         // 載入統計資料
@@ -1979,6 +2163,9 @@
         // 清空表單，繼續下一筆計算
         function clearForm() {
             if (confirm('確定要清空所有資料嗎？')) {
+                // 記錄使用次數（每次清空計為一次查詢）
+                recordUsage();
+                
                 // 清空所有輸入欄位
                 document.getElementById('frequency').value = '2';  // 預設BID
                 document.getElementById('days').value = '';  // 清空
