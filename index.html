@@ -731,34 +731,33 @@
                             點擊下方按鈕即可查看完整統計資料
                         </p>
                         
-                        <div style="margin-bottom: 30px;">
-                            <input type="text" id="sheetsUrl" placeholder="請輸入 Google 試算表網址" 
-                                   value=""
-                                   style="width: 80%; max-width: 600px; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
-                            <div style="font-size: 12px; color: #999; margin-top: 8px;">
-                                格式範例：https://docs.google.com/spreadsheets/d/你的試算表ID/edit
-                            </div>
-                        </div>
-                        
-                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                            <button onclick="openGoogleSheets()" style="padding: 14px 30px; background: linear-gradient(135deg, #0F9D58 0%, #0A7E3E 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3); transition: all 0.3s;">
+                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+                            <button onclick="openGoogleSheets()" style="padding: 16px 40px; background: linear-gradient(135deg, #0F9D58 0%, #0A7E3E 100%); color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 157, 88, 0.3); transition: all 0.3s;">
                                 📊 開啟 Google 試算表統計
                             </button>
-                            
-                            <button onclick="viewLocalStats()" style="padding: 14px 30px; background: #757575; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s;">
-                                💾 查看本機統計
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <button onclick="viewLocalStats()" style="padding: 12px 30px; background: #757575; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+                                💾 查看本機統計（備用）
                             </button>
                         </div>
                         
-                        <div style="margin-top: 30px; padding: 20px; background: #f0f7f4; border-radius: 8px; border-left: 4px solid #2C5F2D;">
-                            <div style="font-size: 14px; color: #2C5F2D; font-weight: 600; margin-bottom: 8px;">💡 使用說明</div>
-                            <div style="font-size: 13px; color: #666; text-align: left; line-height: 1.8;">
-                                <strong>Google 試算表統計：</strong>顯示所有裝置、所有員工的完整使用紀錄（需設定試算表網址）<br>
-                                <strong>本機統計：</strong>僅顯示此電腦、此瀏覽器的使用紀錄
+                        <div style="margin-top: 30px; padding: 20px; background: #f0f7f4; border-radius: 8px; border-left: 4px solid #2C5F2D; text-align: left;">
+                            <div style="font-size: 14px; color: #2C5F2D; font-weight: 600; margin-bottom: 10px;">💡 統計功能說明</div>
+                            <div style="font-size: 13px; color: #666; line-height: 1.8;">
+                                <strong>📊 Google 試算表統計（推薦）：</strong><br>
+                                • 顯示所有裝置、所有員工的完整使用紀錄<br>
+                                • 自動統計使用次數、每日使用量、尖峰時段<br>
+                                • 提供圖表、樞紐分析表等視覺化工具<br>
+                                <br>
+                                <strong>💾 本機統計：</strong><br>
+                                • 僅顯示此電腦、此瀏覽器的使用紀錄<br>
+                                • 可離線查詢、日期篩選、CSV匯出
                             </div>
                         </div>
                         
-                        <div style="margin-top: 20px;">
+                        <div style="margin-top: 25px;">
                             <button onclick="logout()" style="padding: 10px 24px; background: #666; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px;">
                                 登出
                             </button>
