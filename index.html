@@ -1821,8 +1821,17 @@
             const account = document.getElementById('adminAccount').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
 
+            // 從 localStorage 讀取員工清單
+            let employees = JSON.parse(localStorage.getItem('employeeList') || 'null');
+            
+            // 如果沒有員工資料，自動初始化
+            if (!employees) {
+                console.log('初始化員工資料...');
+                initializeEmployeeList();
+                employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
+            }
+            
             // 從員工清單中讀取所有主管
-            const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
             const validAdmins = [];
             
             Object.entries(employees).forEach(([id, data]) => {
@@ -1842,7 +1851,7 @@
                 document.getElementById('adminLoginPage').style.display = 'none';
                 document.getElementById('adminPage').style.display = 'block';
             } else {
-                alert('帳號或密碼錯誤！');
+                alert('帳號或密碼錯誤！\n\n提示：\n帳號：000018371 / 000008134 / 000039485\n密碼：boss');
             }
         }
 
