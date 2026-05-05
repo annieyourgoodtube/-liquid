@@ -913,6 +913,14 @@
                 </div>
 
                 <div class="input-group">
+                    <label>是否為大體積藥材</label>
+                    <select id="bulkyHerb">
+                        <option value="no" selected>否 - 非大體積藥材</option>
+                        <option value="yes">是 - 大體積藥材</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
                     <label>是否為特殊藥材</label>
                     <select id="herbType" onchange="toggleSpecialHerbs()">
                         <option value="normal" selected>否 - 一般藥材</option>
@@ -1363,6 +1371,7 @@
             const waterPerPack = parseFloat(document.getElementById('waterPerPack').value);
             const herbWeight = parseFloat(document.getElementById('herbWeight').value);
             const herbType = document.getElementById('herbType').value;
+            const bulkyHerb = document.getElementById('bulkyHerb').value;
 
             // 驗證輸入
             if (!herbWeight || herbWeight <= 0) {
@@ -1381,16 +1390,40 @@
             // 藥材吸水係數
             let absorptionCoeff = 2.0;
             let ratioText = '';
+            let coeffReason = '';
+            
+            // 判斷是否為大體積藥材
+            if (bulkyHerb === 'yes') {
+                absorptionCoeff = 4.0;
+                coeffReason = '大體積藥材';
+            }
             
             if (herbType === 'special') {
                 // 檢查是否已計算佔比
                 if (window.specialHerbCoeff) {
-                    absorptionCoeff = window.specialHerbCoeff;
+                    // 如果是大體積藥材，已經是4.0，不需要再改變
+                    // 如果不是大體積藥材，則使用特殊藥材的係數
+                    if (bulkyHerb !== 'yes') {
+                        absorptionCoeff = window.specialHerbCoeff;
+                    }
                     ratioText = `特殊藥材佔比${window.specialHerbRatio.toFixed(1)}%（${window.specialHerbRatio > 50 ? '50%以上' : '50%以下'}）`;
+                    
+                    // 更新係數原因
+                    if (bulkyHerb === 'yes' && window.specialHerbCoeff === 4.0) {
+                        coeffReason = '大體積藥材 + 特殊藥材（>50%）';
+                    } else if (bulkyHerb === 'yes') {
+                        coeffReason = '大體積藥材';
+                    } else {
+                        coeffReason = window.specialHerbRatio > 50 ? '特殊藥材（>50%）' : '特殊藥材（≤50%）';
+                    }
                 } else {
                     alert('請先完成特殊藥材選擇並計算佔比！');
                     return;
                 }
+            } else if (bulkyHerb === 'yes') {
+                coeffReason = '大體積藥材';
+            } else {
+                coeffReason = '一般藥材';
             }
 
             // 藥材吸水量
@@ -1532,8 +1565,13 @@
                 warnings.push(`⚠️ 估算體積超過原建議器具的80%容量（${(capacityRatio * 100).toFixed(1)}%），已自動改用更大器具`);
             }
 
+            // 顯示係數原因
+            if (coeffReason) {
+                warnings.push(`✓ ${coeffReason}，吸水係數 ${absorptionCoeff}`);
+            }
+            
             if (ratioText) {
-                warnings.push(`✓ ${ratioText}，吸水係數 ${absorptionCoeff}`);
+                warnings.push(`${ratioText}`);
             }
 
             if (warnings.length > 0) {
@@ -2162,6 +2200,7 @@
                 document.getElementById('days').value = '';  // 清空
                 document.getElementById('waterPerPack').value = '';  // 清空
                 document.getElementById('herbWeight').value = '';  // 清空
+                document.getElementById('bulkyHerb').value = 'no';  // 重置大體積藥材
                 document.getElementById('herbType').value = 'normal';  // 預設一般藥材
                 
                 // 隱藏特殊藥材區域
