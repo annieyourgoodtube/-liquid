@@ -646,7 +646,7 @@
                     ✓ 登入系統
                 </button>
                 
-                <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
+                <div style="text-align: center; margin-top: 20px; margin-bottom: 30px; display: none;">
                     <a href="javascript:void(0)" onclick="showAdminLogin()" style="color: #666; font-size: 13px; text-decoration: none;">管理員查詢 →</a>
                 </div>
                 
@@ -655,7 +655,7 @@
                     <div style="margin-bottom: 6px;"><strong>指導：</strong>陳綺華 部主任・李雅蓁 主任</div>
                     <div style="margin-bottom: 6px;"><strong>製作：</strong>許文馨・張雅婷</div>
                     <div style="margin-bottom: 6px; color: #2C5F2D; font-weight: 600;">合心協力・精進專業</div>
-                    <div style="opacity: 0.6; font-size: 11px;">© 2026.04 All Rights Reserved</div>
+                    <div style="opacity: 0.6; font-size: 11px; cursor: default; user-select: none;" onclick="triggerConnectionTest()">© 2026.04 All Rights Reserved</div>
                 </div>
             </div>
         </div>
@@ -2003,6 +2003,89 @@
             .catch(error => {
                 console.error('送至 Google Sheets 失敗:', error);
             });
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // 測試試算表連線(隱藏功能,連點版權聲明 5 次觸發)
+        // ═══════════════════════════════════════════════════════
+        let _testClickCount = 0;
+        let _testClickTimer = null;
+
+        function triggerConnectionTest() {
+            _testClickCount++;
+            
+            // 重置計時器:3 秒內沒繼續點就歸零
+            clearTimeout(_testClickTimer);
+            _testClickTimer = setTimeout(() => {
+                _testClickCount = 0;
+            }, 3000);
+            
+            // 連點 5 次才觸發
+            if (_testClickCount >= 5) {
+                _testClickCount = 0;
+                clearTimeout(_testClickTimer);
+                showConnectionTestDialog();
+            }
+        }
+
+        function showConnectionTestDialog() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-TW');
+            const dateStr = now.toLocaleDateString('zh-TW');
+            
+            const confirmed = confirm(
+                '🔧 測試試算表連線\n\n' +
+                '即將送出一筆「[測試]」資料到 Google 試算表,\n' +
+                '送出後會自動開啟試算表讓你確認。\n\n' +
+                '請在試算表中找以下這筆資料:\n' +
+                `  • 員工編號:[測試]\n` +
+                `  • 姓名:連線測試\n` +
+                `  • 日期:${dateStr}\n` +
+                `  • 時間:${timeStr}\n\n` +
+                '是否要送出測試?'
+            );
+            
+            if (!confirmed) return;
+            
+            // 送出測試資料(用顯眼的標記讓你能在試算表中分辨)
+            const testData = {
+                employeeId: '[測試]',
+                employeeName: '連線測試',
+                timestamp: now.toISOString(),
+                date: dateStr,
+                time: timeStr
+            };
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(testData)
+            })
+            .then(() => {
+                console.log('[測試] 資料已送出', testData);
+            })
+            .catch(error => {
+                console.error('[測試] 送出失敗:', error);
+            });
+            
+            // 因為 no-cors 收不到回應,直接開試算表讓使用者親眼確認
+            setTimeout(() => {
+                const proceed = confirm(
+                    '✓ 測試資料已送出\n\n' +
+                    `送出時間:${timeStr}\n` +
+                    '即將開啟 Google 試算表,\n' +
+                    '請找以下這筆資料確認連線是否正常:\n\n' +
+                    `  員工編號:[測試]\n` +
+                    `  時間:${timeStr}\n\n` +
+                    '⚠️ 測試完畢後請手動到試算表刪除這筆測試資料。\n\n' +
+                    '按「確定」開啟試算表'
+                );
+                
+                if (proceed) {
+                    window.open(GOOGLE_SHEETS_VIEW_URL, '_blank');
+                }
+            }, 800);
         }
 
         // 開啟 Google Sheets
