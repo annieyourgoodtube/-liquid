@@ -617,6 +617,37 @@
     </style>
 </head>
 <body>
+    <!-- 清空資料確認警告條(預設隱藏,從畫面上方滑入) -->
+    <div id="clearConfirmBar" style="
+        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+        background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+        color: white; padding: 18px 24px;
+        box-shadow: 0 4px 20px rgba(211, 47, 47, 0.5);
+        transform: translateY(-100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <div style="font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 28px;">⚠️</span>
+            <span>確定要清空所有資料嗎?此動作無法復原</span>
+        </div>
+        <div style="display: flex; gap: 12px;">
+            <button onclick="confirmClearForm()" style="
+                background: white; color: #b71c1c; border: none; padding: 12px 28px;
+                border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.2s;"
+                onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 10px rgba(0,0,0,0.3)';"
+                onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.2)';">
+                ✓ 確定清空
+            </button>
+            <button onclick="cancelClearForm()" style="
+                background: transparent; color: white; border: 2px solid white; padding: 10px 24px;
+                border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.15)';"
+                onmouseout="this.style.background='transparent';">
+                ✕ 取消
+            </button>
+        </div>
+    </div>
+
     <!-- 登入頁面 -->
     <div id="loginPage" class="login-page">
         <div class="login-container">
@@ -1193,11 +1224,14 @@
 
             // 保留現有的勾選狀態和重量輸入值(切換搜尋時不能弄丟)
             // 已存在的勾選狀態:從 window._selectedHerbCodes 取得
-            // 已存在的重量:從現有 input 抓取
+            // 已存在的重量:從現有 input 抓取(只抓已勾選的,避免空 input 污染暫存)
             if (!window._herbWeights) window._herbWeights = {};
             container.querySelectorAll('input[type="number"]').forEach(inp => {
                 const code = inp.dataset.code;
-                if (code) window._herbWeights[code] = inp.value;
+                if (code && window._selectedHerbCodes && window._selectedHerbCodes.has(code)) {
+                    // 只同步「已勾選」的項目;沒勾選的 disabled input 不要覆蓋暫存
+                    window._herbWeights[code] = inp.value;
+                }
             });
 
             container.innerHTML = '';
@@ -1372,18 +1406,26 @@
                 return;
             }
 
-            // 先把當前畫面上的重量值同步到暫存(避免搜尋過濾導致 DOM 抓不到)
+            // 先把當前畫面上的重量值同步到暫存(只同步已勾選的,避免空 input 污染)
             if (!window._herbWeights) window._herbWeights = {};
             document.querySelectorAll('#herbCheckboxContainer input[type="number"]').forEach(inp => {
                 const code = inp.dataset.code;
-                if (code) window._herbWeights[code] = inp.value;
+                if (code && window._selectedHerbCodes && window._selectedHerbCodes.has(code)) {
+                    window._herbWeights[code] = inp.value;
+                }
             });
             
             const selectedCodes = Array.from(window._selectedHerbCodes || []);
-            
+
+            if (selectedCodes.length === 0) {
+                alert('請至少勾選一項特殊及大體積藥材！');
+                return;
+            }
+
             let totalSpecialWeight = 0;
             let hasInput = false;
             const detail = [];
+            const missingWeight = [];  // 已勾選但沒填重量的項目
             
             selectedCodes.forEach(code => {
                 const qianValue = parseFloat(window._herbWeights[code]) || 0;
@@ -1391,8 +1433,20 @@
                     hasInput = true;
                     totalSpecialWeight += qianValue * 3.75;
                     detail.push({ code, qian: qianValue, gram: qianValue * 3.75 });
+                } else {
+                    // 找出對應的藥材名以便提示
+                    const herbInfo = HERB_LIST.find(([c, n]) => c === code);
+                    if (herbInfo) missingWeight.push(`${herbInfo[0]}：${herbInfo[1]}`);
                 }
             });
+
+            // 若有勾選但沒填重量,提示使用者
+            if (missingWeight.length > 0) {
+                const msg = `以下藥材已勾選但未填重量:\n\n${missingWeight.join('\n')}\n\n要繼續計算嗎?(未填重量的項目會被忽略)`;
+                if (!confirm(msg)) {
+                    return;
+                }
+            }
             
             if (!hasInput) {
                 alert('請至少輸入一項已勾選藥材的重量！');
@@ -1629,8 +1683,7 @@
                 document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 100);
 
-            // ===== 自動清空所有輸入(保留結果顯示) =====
-            autoClearInputs();
+            // ===== 不自動清空,讓使用者看完結果後手動按「🔄 清空資料」按鈕 =====
         }
 
         // 自動清空所有輸入欄位(計算完成後呼叫,不清空結果區域)
@@ -2270,52 +2323,70 @@
 
         // ===== 員工維護功能 =====
         
-        // 清空表單，繼續下一筆計算
+        // 清空表單:第一步,顯示頁面上方的警告條(取代瀏覽器原生 confirm)
         function clearForm() {
-            if (confirm('確定要清空所有資料嗎？')) {
-                // 清空所有輸入欄位
-                document.getElementById('frequency').value = '2';  // 預設BID
-                document.getElementById('days').value = '';  // 清空
-                document.getElementById('waterPerPack').value = '';  // 清空
-                document.getElementById('herbWeight').value = '';  // 清空
-                document.getElementById('herbType').value = 'normal';  // 預設一般藥材
-                
-                // 隱藏特殊藥材區域
-                document.getElementById('specialHerbsSelectSection').style.display = 'none';
-                document.getElementById('ratioResultSection').style.display = 'none';
-                // herbInfoSection 維持隱藏
-                
-                // 清空全域已勾選紀錄與重量暫存
-                window._selectedHerbCodes = new Set();
-                window._herbWeights = {};
-                
-                // 清空搜尋框
-                const searchBox = document.getElementById('herbSearchBox');
-                if (searchBox) searchBox.value = '';
-                
-                // 清空勾選清單容器
-                const container = document.getElementById('herbCheckboxContainer');
-                if (container) container.innerHTML = '';
-                
-                // 隱藏已勾選預覽
-                const preview = document.getElementById('selectedHerbsPreview');
-                if (preview) preview.style.display = 'none';
-                
-                // 清空全域變數
-                window.specialHerbRatio = null;
-                window.specialHerbCoeff = null;
-                
-                // 隱藏結果區域
-                document.getElementById('result').classList.remove('show');
-                
-                // 捲動到頁面頂部
+            const bar = document.getElementById('clearConfirmBar');
+            if (bar) {
+                bar.style.transform = 'translateY(0)';
+                // 捲到頁面頂部讓使用者看到警告條
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                // 聚焦到天數欄位
-                setTimeout(() => {
-                    document.getElementById('days').focus();
-                }, 500);
             }
+        }
+
+        // 取消清空 - 收起警告條
+        function cancelClearForm() {
+            const bar = document.getElementById('clearConfirmBar');
+            if (bar) bar.style.transform = 'translateY(-100%)';
+        }
+
+        // 確認清空 - 收起警告條並真正執行清空
+        function confirmClearForm() {
+            // 先收起警告條
+            const bar = document.getElementById('clearConfirmBar');
+            if (bar) bar.style.transform = 'translateY(-100%)';
+
+            // 清空所有輸入欄位
+            document.getElementById('frequency').value = '2';  // 預設BID
+            document.getElementById('days').value = '';
+            document.getElementById('waterPerPack').value = '';
+            document.getElementById('herbWeight').value = '';
+            document.getElementById('herbType').value = 'normal';  // 預設一般藥材
+            
+            // 隱藏特殊藥材區域
+            document.getElementById('specialHerbsSelectSection').style.display = 'none';
+            document.getElementById('ratioResultSection').style.display = 'none';
+            // herbInfoSection 維持隱藏
+            
+            // 清空全域已勾選紀錄與重量暫存
+            window._selectedHerbCodes = new Set();
+            window._herbWeights = {};
+            
+            // 清空搜尋框
+            const searchBox = document.getElementById('herbSearchBox');
+            if (searchBox) searchBox.value = '';
+            
+            // 清空勾選清單容器
+            const container = document.getElementById('herbCheckboxContainer');
+            if (container) container.innerHTML = '';
+            
+            // 隱藏已勾選預覽
+            const preview = document.getElementById('selectedHerbsPreview');
+            if (preview) preview.style.display = 'none';
+            
+            // 清空全域變數
+            window.specialHerbRatio = null;
+            window.specialHerbCoeff = null;
+            
+            // 隱藏結果區域
+            document.getElementById('result').classList.remove('show');
+            
+            // 捲動到頁面頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 聚焦到天數欄位
+            setTimeout(() => {
+                document.getElementById('days').focus();
+            }, 500);
         }
         
         // 載入員工清單
