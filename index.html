@@ -913,145 +913,59 @@
                 </div>
 
                 <div class="input-group">
-                    <label>是否為大體積藥材</label>
-                    <select id="bulkyHerb">
-                        <option value="no" selected>否 - 非大體積藥材</option>
-                        <option value="yes">是 - 大體積藥材</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>是否為特殊藥材</label>
+                    <label>是否包含特殊及大體積藥材</label>
                     <select id="herbType" onchange="toggleSpecialHerbs()">
                         <option value="normal" selected>否 - 一般藥材</option>
-                        <option value="special">是 - 特殊藥材</option>
+                        <option value="special">是 - 包含特殊及大體積藥材</option>
                     </select>
                 </div>
             </div>
 
             <!-- 第一階段：特殊藥材勾選（選擇「是」時顯示） -->
             <div class="section" id="specialHerbsSelectSection" style="display: none;">
-                <div class="section-title">🌿 特殊藥材確認（勾選）</div>
+                <div class="section-title">🌿 特殊及大體積藥材確認（勾選）</div>
                 
                 <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
                     <p style="color: #856404; font-size: 14px; margin: 0;">
-                        請勾選處方中包含的特殊藥材，勾選完畢後點擊「確認勾選」按鈕。
+                        請勾選處方中包含的特殊及大體積藥材，可用搜尋框過濾。勾選完畢後點擊「確認勾選」按鈕。
                     </p>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px;">
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_蒲公英" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">蒲公英</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_綿茵陳" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">綿茵陳</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_防風" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">防風</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_北沙參" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">北沙參</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_山藥" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">山藥</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_黨參" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">黨參</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_天門冬" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">天門冬</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_麥門冬" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">麥門冬</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_胖大海" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">胖大海</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_王不留行子" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">王不留行子</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_葶藶子" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">葶藶子</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_紫蘇子" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">紫蘇子</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_車前子" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">車前子</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_菟絲子" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">菟絲子</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_薏苡仁" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">薏苡仁</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_赤小豆" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">赤小豆</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_炒麥芽" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">炒麥芽</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_銀花" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">銀花</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_淡竹葉" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">淡竹葉</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
-                        <input type="checkbox" id="herb_check_白花舌蛇草" style="width: 22px; height: 22px; cursor: pointer;">
-                        <span style="font-size: 21px; font-weight: 600;">白花舌蛇草</span>
-                    </label>
+                <!-- 搜尋框 -->
+                <div style="margin-bottom: 15px;">
+                    <input type="text" id="herbSearchBox" placeholder="🔍 輸入代碼或藥材名稱搜尋(例如: RA07 或 青蒿)" 
+                           oninput="filterHerbList()" 
+                           style="width: 100%; padding: 14px; border: 2px solid #4CAF50; border-radius: 8px; font-size: 18px; box-sizing: border-box;">
+                    <div id="herbSearchResultInfo" style="margin-top: 6px; font-size: 14px; color: #666;"></div>
                 </div>
 
-                <button onclick="confirmSelection()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
-                    ✓ 確認勾選
-                </button>
-            </div>
+                <!-- 已勾選預覽(浮動顯示) -->
+                <div id="selectedHerbsPreview" style="display: none; background: #e8f5e9; padding: 12px 16px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #4CAF50;">
+                    <div style="font-size: 15px; color: #2e7d32; font-weight: 700; margin-bottom: 6px;">已勾選 <span id="selectedCount">0</span> 項:</div>
+                    <div id="selectedHerbsList" style="font-size: 16px; color: #1b5e20; line-height: 1.7; font-weight: 600;"></div>
+                </div>
 
-            <!-- 第二階段：輸入重量（確認勾選後顯示） -->
-            <div class="section" id="specialHerbsWeightSection" style="display: none;">
-                <div class="section-title">⚖️ 輸入特殊藥材重量（錢）</div>
-                
-                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <p style="color: #1565c0; font-size: 14px; margin: 0; line-height: 1.6;">
-                        已選擇 <strong><span id="selectedCount">0</span></strong> 種特殊藥材，請輸入各藥材的重量（錢）。<br>
-                        <span style="font-size: 13px; color: #0277bd;">💡 系統將自動換算為克（1錢 = 3.75克）</span>
+                <!-- 藥材清單(JS 動態渲染) - 固定一排 3 個 -->
+                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <!-- 由 renderHerbList() 動態生成 -->
+                </div>
+
+                <div style="background: #e3f2fd; padding: 10px 15px; border-radius: 8px; margin-bottom: 12px;">
+                    <p style="color: #1565c0; font-size: 14px; margin: 0; line-height: 1.5;">
+                        💡 勾選後在右側輸入重量(錢),系統自動換算為克(1錢=3.75克)
                     </p>
                 </div>
 
-                <div id="weightInputList" style="max-height: 250px; overflow-y: auto;">
-                    <!-- 這裡會動態生成輸入框 -->
-                </div>
-
-                <button onclick="calculateRatio()" style="width: 100%; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 15px;">
+                <button onclick="calculateRatio()" style="width: 100%; padding: 12px; background: #2196F3; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;">
                     📊 計算佔比
                 </button>
             </div>
 
-            <!-- 第三階段：顯示佔比結果 -->
+            <!-- 佔比結果 -->
             <div id="ratioResultSection" style="display: none; margin-top: 20px;">
                 <div style="padding: 20px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; border-left: 5px solid #4CAF50;">
                     <div style="font-size: 18px; font-weight: 700; color: #2C5F2D; margin-bottom: 10px;">
-                        📊 特殊藥材佔比
+                        📊 特殊及大體積藥材佔比
                     </div>
                     <div style="font-size: 32px; font-weight: 700; color: #1B5E20; font-family: 'Arial', sans-serif; margin-bottom: 10px;">
                         <span id="ratioPercentage">0</span>%
@@ -1065,14 +979,13 @@
                 </div>
             </div>
 
-            <!-- 特殊藥材說明 -->
-            <div class="section" id="herbInfoSection">
+            <!-- 特殊及大體積藥材說明(預設隱藏) -->
+            <div class="section" id="herbInfoSection" style="display: none;">
                 <div class="special-herbs-list">
-                    <strong>特殊藥材種類：</strong><br>
-                    草本與葉類：蒲公英、綿茵陳、防風、淡竹葉、白花舌蛇草<br>
-                    根莖與皮類：北沙參、山藥、黨參、天門冬、麥門冬<br>
-                    種子與果實類：胖大海、王不留行子、葶藶子、紫蘇子、車前子、菟絲子、薏苡仁、赤小豆、炒麥芽<br>
-                    花類：銀花
+                    <strong>特殊及大體積藥材吸水係數:</strong><br>
+                    📌 沒有勾選任何項目 → 係數 <strong>2.0</strong>(一般藥材)<br>
+                    📌 有勾選,且佔比 <strong>&lt; 30%</strong> → 係數 <strong>2.0</strong>(視同一般藥材)<br>
+                    📌 有勾選,且佔比 <strong>≥ 30%</strong> → 係數 <strong>4.0</strong>
                 </div>
             </div>
 
@@ -1226,87 +1139,231 @@
             checkbox.dispatchEvent(new Event('change'));
         }
 
-        // 切換特殊藥材選擇區域
+        // ============================================================
+        // 特殊及大體積藥材清單 (代碼, 藥材名)
+        // ============================================================
+        const HERB_LIST = [
+            ["RA07","青蒿"],["RA09","敗醬草"],["RA10","藿香"],["RA11","佩蘭"],
+            ["RB09","枇杷葉"],["RB10","龍膽草"],["RB11","艾葉"],
+            ["RC11","紫蘇葉"],["RD10","魚腥草"],
+            ["RE08","雞血藤"],["RE09","白花蛇舌草"],["RE10","半支蓮"],["RE11","蒲公英"],
+            ["RF09","杜仲炒"],["RF10","益母草"],
+            ["RG08","厚朴筒"],["RG11","茵陳綿"],
+            ["RH10","荊芥"],["RH11","旱蓮草"],
+            ["RI09","旋覆花"],["RI10","淫羊藿"],["RI11","桑葉"],
+            ["RJ09","夏枯花草"],["RJ10","淡竹葉"],["RJ11","蟬蛻"],
+            ["RK01","蘆根"],["RK09","絲瓜絡"],["RK10","通草"],["RK11","玉米鬚"],
+            ["RL02","白豆蔻"],["RL09","釘地蜈蚣"],["RL10","丁豎朽"],["RL11","皂刺"],
+            ["SA01","王不留行"],
+            ["SB07","羌活"],["SB12","紫草"],
+            ["SC07","雙鉤藤"],["SC08","五靈脂"],["SC13","升麻"],
+            ["SD06","豬苓"],["SD07","劉寄奴"],["SD12","蔓荊子"],["SD13","白英"],["SD14","故紙花"],
+            ["SE03","銀花"],["SE12","茜草"],
+            ["TA04","瞿麥"],["TA07","龍葵"],["TA09","荷葉"],["TA10","澤蘭-正"],["TA11","豨薟草"],
+            ["TA12","小本七層塔"],["TA14","白尾蜈蚣"],["TA15","石上柏"],["TA17","麻芝糊草"],
+            ["TB06","仙鶴草"],["TB10","穿心蓮"],["TB12","伸筋草"],["TB14","燈心草"],
+            ["TB16","黑荊芥"],["TB17","馬齒莧"],["TB18","金錢薄荷"],
+            ["VA07","徐長卿"],["VA08","貫眾"],["VA09","露蜂房"],
+            ["WA38","紅花川W26"],["WA71","栝蔞實W51"],["WA73","玉竹W46"],
+            ["WA77","菊花W12"],["WA79","佛手W32"],["WA85","守宮W50"],
+            ["WB11","薄荷RC09"],["WB21","天麻RG10"],["WB28","靈芝SD15"],["WB29","土茯苓VA16"],
+            ["WD11","雞內金TB11"],["WE25","桔梗RC08"],["WX11","★蟾蜍乾W49"],
+            // 原 20 種裡新清單沒有的藥材(自訂代碼 X01~X14)
+            ["X01","防風"],["X02","北沙參"],["X03","山藥"],["X04","黨參"],
+            ["X05","天門冬"],["X06","麥門冬"],["X07","胖大海"],["X08","葶藶子"],
+            ["X09","紫蘇子"],["X10","車前子"],["X11","菟絲子"],["X12","薏苡仁"],
+            ["X13","赤小豆"],["X14","炒麥芽"]
+        ];
+
+        // 將 (code, name) 配對轉成可作為 HTML id 的 key
+        function herbKey(code) {
+            return code;  // 代碼本身就是唯一的,直接當 key
+        }
+
+        // 渲染整個藥材勾選清單(勾選 + 重量輸入合併一行)
+        function renderHerbList(filterText) {
+            const container = document.getElementById('herbCheckboxContainer');
+            if (!container) return;
+
+            const lower = (filterText || '').trim().toLowerCase();
+            const filtered = HERB_LIST.filter(([code, name]) => {
+                if (!lower) return true;
+                return code.toLowerCase().includes(lower) || name.toLowerCase().includes(lower);
+            });
+
+            // 保留現有的勾選狀態和重量輸入值(切換搜尋時不能弄丟)
+            // 已存在的勾選狀態:從 window._selectedHerbCodes 取得
+            // 已存在的重量:從現有 input 抓取
+            if (!window._herbWeights) window._herbWeights = {};
+            container.querySelectorAll('input[type="number"]').forEach(inp => {
+                const code = inp.dataset.code;
+                if (code) window._herbWeights[code] = inp.value;
+            });
+
+            container.innerHTML = '';
+            filtered.forEach(([code, name]) => {
+                const checked = window._selectedHerbCodes && window._selectedHerbCodes.has(code);
+                const weightVal = window._herbWeights[code] || '';
+                
+                const row = document.createElement('div');
+                row.style.cssText = `
+                    display: flex; flex-direction: column; gap: 8px; padding: 10px 12px;
+                    background: ${checked ? '#e8f5e9' : '#ffffff'};
+                    border: 2px solid ${checked ? '#4CAF50' : '#e0e0e0'};
+                    border-radius: 8px; transition: all 0.2s; min-width: 0;
+                `;
+                row.innerHTML = `
+                    <!-- 上排:勾選框 + 代碼:藥材名 -->
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                        <input type="checkbox" id="herb_check_${code}" data-code="${code}" data-name="${name}" 
+                               ${checked ? 'checked' : ''}
+                               onchange="onHerbCheckChanged(this)"
+                               style="width: 22px; height: 22px; cursor: pointer; flex-shrink: 0;">
+                        <label for="herb_check_${code}" style="flex: 1; cursor: pointer; line-height: 1.25; min-width: 0; overflow: hidden;">
+                            <span style="color: #1976d2; font-family: monospace; font-size: 16px; font-weight: 700;">${code}</span>
+                            <span style="color: #999; font-size: 16px;">：</span>
+                            <span style="font-size: 19px; font-weight: 600; color: #1B4D3E;">${name}</span>
+                        </label>
+                    </div>
+                    <!-- 下排:重量輸入 + 錢 + 克數換算 -->
+                    <div style="display: flex; align-items: center; gap: 4px; padding-left: 30px;">
+                        <input type="number" id="weight_${code}" data-code="${code}" 
+                               min="0" step="0.1" placeholder="0" value="${weightVal}"
+                               ${checked ? '' : 'disabled'}
+                               oninput="convertQianToGram('${code}')"
+                               style="width: 70px; padding: 6px 8px; font-size: 16px; font-weight: 600; text-align: right;
+                                      border: 2px solid ${checked ? '#2196F3' : '#e0e0e0'}; border-radius: 6px;
+                                      background: ${checked ? '#fff' : '#f5f5f5'}; min-width: 0;">
+                        <span style="font-size: 14px; color: #666; font-weight: 600;">錢</span>
+                        <span style="font-size: 13px; color: #2C5F2D; font-weight: 600; margin-left: 4px;" id="converted_${code}"></span>
+                    </div>
+                `;
+                container.appendChild(row);
+
+                // 若已有保存的重量,觸發換算顯示
+                if (checked && weightVal) {
+                    setTimeout(() => convertQianToGram(code), 0);
+                }
+            });
+
+            // 顯示搜尋結果統計
+            const info = document.getElementById('herbSearchResultInfo');
+            if (info) {
+                if (lower) {
+                    info.textContent = `搜尋「${filterText}」→ 找到 ${filtered.length} / ${HERB_LIST.length} 項`;
+                } else {
+                    info.textContent = `共 ${HERB_LIST.length} 項藥材`;
+                }
+            }
+
+            updateSelectedPreview();
+        }
+
+        // 勾選狀態變更時:啟用/停用重量輸入,並更新樣式
+        function onHerbCheckChanged(checkbox) {
+            const code = checkbox.dataset.code;
+            const weightInput = document.getElementById(`weight_${code}`);
+            const row = checkbox.parentElement;
+
+            if (!window._selectedHerbCodes) window._selectedHerbCodes = new Set();
+
+            if (checkbox.checked) {
+                window._selectedHerbCodes.add(code);
+                if (weightInput) {
+                    weightInput.disabled = false;
+                    weightInput.style.border = '2px solid #2196F3';
+                    weightInput.style.background = '#fff';
+                    weightInput.focus();
+                }
+                row.style.background = '#e8f5e9';
+                row.style.border = '2px solid #4CAF50';
+            } else {
+                window._selectedHerbCodes.delete(code);
+                if (weightInput) {
+                    weightInput.value = '';
+                    weightInput.disabled = true;
+                    weightInput.style.border = '2px solid #e0e0e0';
+                    weightInput.style.background = '#f5f5f5';
+                }
+                // 清掉這一項的暫存
+                if (window._herbWeights) delete window._herbWeights[code];
+                const convSpan = document.getElementById(`converted_${code}`);
+                if (convSpan) convSpan.textContent = '';
+                row.style.background = '#ffffff';
+                row.style.border = '2px solid #e0e0e0';
+            }
+
+            updateSelectedPreview();
+        }
+
+        // 搜尋框 oninput 觸發
+        function filterHerbList() {
+            const text = document.getElementById('herbSearchBox').value;
+            renderHerbList(text);
+        }
+
+        // 更新已勾選預覽(已勾選清單顯示在搜尋框下方)
+        function updateSelectedPreview() {
+            if (!window._selectedHerbCodes) window._selectedHerbCodes = new Set();
+            
+            const preview = document.getElementById('selectedHerbsPreview');
+            const count = window._selectedHerbCodes.size;
+            const cntEl = document.getElementById('selectedCount');
+            if (cntEl) cntEl.textContent = count;
+            
+            if (count > 0) {
+                const items = HERB_LIST.filter(([c, n]) => window._selectedHerbCodes.has(c))
+                                       .map(([c, n]) => `${c}：${n}`);
+                document.getElementById('selectedHerbsList').textContent = items.join('、');
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // 切換特殊及大體積藥材選擇區域
         function toggleSpecialHerbs() {
             const herbType = document.getElementById('herbType').value;
             const selectSection = document.getElementById('specialHerbsSelectSection');
-            const weightSection = document.getElementById('specialHerbsWeightSection');
             const resultSection = document.getElementById('ratioResultSection');
-            const infoSection = document.getElementById('herbInfoSection');
             
             if (herbType === 'special') {
                 selectSection.style.display = 'block';
-                infoSection.style.display = 'none';
-                weightSection.style.display = 'none';
                 resultSection.style.display = 'none';
+                // 重置:搜尋框、勾選紀錄、重量暫存
+                document.getElementById('herbSearchBox').value = '';
+                window._selectedHerbCodes = new Set();
+                window._herbWeights = {};
+                renderHerbList('');
             } else {
                 selectSection.style.display = 'none';
-                weightSection.style.display = 'none';
                 resultSection.style.display = 'none';
-                infoSection.style.display = 'block';
             }
         }
 
         // 錢轉克換算函數（1錢 = 3.75克）
-        function convertQianToGram(herbName) {
-            const qianInput = document.getElementById(`weight_${herbName}`);
-            const convertedSpan = document.getElementById(`converted_${herbName}`);
-            
+        function convertQianToGram(code) {
+            const qianInput = document.getElementById(`weight_${code}`);
+            const convertedSpan = document.getElementById(`converted_${code}`);
+            if (!qianInput) return;
+
             const qianValue = parseFloat(qianInput.value) || 0;
-            if (qianValue > 0) {
-                const gramValue = (qianValue * 3.75).toFixed(2);
-                convertedSpan.textContent = `(${gramValue}g)`;
-            } else {
-                convertedSpan.textContent = '';
-            }
-        }
 
-        // 確認勾選，進入第二階段（輸入克數）
-        function confirmSelection() {
-            const specialHerbs = ['蒲公英', '綿茵陳', '防風', '北沙參', '山藥', '黨參', '天門冬', '麥門冬',
-                                 '胖大海', '王不留行子', '葶藶子', '紫蘇子', '車前子', '菟絲子', 
-                                 '薏苡仁', '赤小豆', '炒麥芽', '銀花', '淡竹葉', '白花舌蛇草'];
-            
-            let selectedHerbs = [];
-            specialHerbs.forEach(herb => {
-                const checkbox = document.getElementById(`herb_check_${herb}`);
-                if (checkbox && checkbox.checked) {
-                    selectedHerbs.push(herb);
+            // 同步到暫存(避免搜尋過濾時 DOM 重建會弄丟值)
+            if (!window._herbWeights) window._herbWeights = {};
+            window._herbWeights[code] = qianInput.value;
+
+            if (convertedSpan) {
+                if (qianValue > 0) {
+                    const gramValue = (qianValue * 3.75).toFixed(2);
+                    convertedSpan.textContent = `= ${gramValue}g`;
+                } else {
+                    convertedSpan.textContent = '';
                 }
-            });
-            
-            if (selectedHerbs.length === 0) {
-                alert('請至少勾選一種特殊藥材！');
-                return;
             }
-            
-            // 更新已選擇數量
-            document.getElementById('selectedCount').textContent = selectedHerbs.length;
-            
-            // 生成輸入框
-            const weightInputList = document.getElementById('weightInputList');
-            weightInputList.innerHTML = '';
-            
-            selectedHerbs.forEach(herb => {
-                const div = document.createElement('div');
-                div.className = 'weight-input-item';
-                div.innerHTML = `
-                    <label>${herb}</label>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="weight_${herb}" min="0" step="0.1" placeholder="0" oninput="convertQianToGram('${herb}')" style="width: 100px;">
-                        <span style="font-size: 14px; color: #666; font-weight: 600;">錢</span>
-                        <span style="font-size: 13px; color: #2C5F2D; min-width: 80px;" id="converted_${herb}"></span>
-                    </div>
-                `;
-                weightInputList.appendChild(div);
-            });
-            
-            // 顯示第二階段，隱藏第一階段
-            document.getElementById('specialHerbsSelectSection').style.display = 'none';
-            document.getElementById('specialHerbsWeightSection').style.display = 'block';
         }
 
-        // 計算特殊藥材佔比
+        // 計算特殊及大體積藥材佔比
         function calculateRatio() {
             const herbWeight = parseFloat(document.getElementById('herbWeight').value);
             
@@ -1314,42 +1371,44 @@
                 alert('請先輸入藥材總重量！');
                 return;
             }
+
+            // 先把當前畫面上的重量值同步到暫存(避免搜尋過濾導致 DOM 抓不到)
+            if (!window._herbWeights) window._herbWeights = {};
+            document.querySelectorAll('#herbCheckboxContainer input[type="number"]').forEach(inp => {
+                const code = inp.dataset.code;
+                if (code) window._herbWeights[code] = inp.value;
+            });
             
-            const specialHerbs = ['蒲公英', '綿茵陳', '防風', '北沙參', '山藥', '黨參', '天門冬', '麥門冬',
-                                 '胖大海', '王不留行子', '葶藶子', '紫蘇子', '車前子', '菟絲子', 
-                                 '薏苡仁', '赤小豆', '炒麥芽', '銀花', '淡竹葉', '白花舌蛇草'];
+            const selectedCodes = Array.from(window._selectedHerbCodes || []);
             
             let totalSpecialWeight = 0;
             let hasInput = false;
+            const detail = [];
             
-            specialHerbs.forEach(herb => {
-                const weightInput = document.getElementById(`weight_${herb}`);
-                if (weightInput) {
-                    const qianValue = parseFloat(weightInput.value) || 0;
-                    if (qianValue > 0) {
-                        hasInput = true;
-                        // 錢轉克：1錢 = 3.75克
-                        const gramValue = qianValue * 3.75;
-                        totalSpecialWeight += gramValue;
-                    }
+            selectedCodes.forEach(code => {
+                const qianValue = parseFloat(window._herbWeights[code]) || 0;
+                if (qianValue > 0) {
+                    hasInput = true;
+                    totalSpecialWeight += qianValue * 3.75;
+                    detail.push({ code, qian: qianValue, gram: qianValue * 3.75 });
                 }
             });
             
             if (!hasInput) {
-                alert('請至少輸入一種特殊藥材的重量！');
+                alert('請至少輸入一項已勾選藥材的重量！');
                 return;
             }
             
             // 計算佔比
             const ratio = (totalSpecialWeight / herbWeight) * 100;
             
-            // 判定係數
+            // 新判定:佔比 ≥30% → 4.0;<30% → 視同一般藥材 2.0
             let category, coeff;
-            if (ratio > 50) {
-                category = '50%以上';
+            if (ratio >= 30) {
+                category = '30%以上';
                 coeff = '4.0';
             } else {
-                category = '50%以下';
+                category = '30%以下(視同一般藥材)';
                 coeff = '2.0';
             }
             
@@ -1371,7 +1430,6 @@
             const waterPerPack = parseFloat(document.getElementById('waterPerPack').value);
             const herbWeight = parseFloat(document.getElementById('herbWeight').value);
             const herbType = document.getElementById('herbType').value;
-            const bulkyHerb = document.getElementById('bulkyHerb').value;
 
             // 驗證輸入
             if (!herbWeight || herbWeight <= 0) {
@@ -1392,36 +1450,18 @@
             let ratioText = '';
             let coeffReason = '';
             
-            // 判斷是否為大體積藥材
-            if (bulkyHerb === 'yes') {
-                absorptionCoeff = 4.0;
-                coeffReason = '大體積藥材';
-            }
-            
             if (herbType === 'special') {
                 // 檢查是否已計算佔比
                 if (window.specialHerbCoeff) {
-                    // 如果是大體積藥材，已經是4.0，不需要再改變
-                    // 如果不是大體積藥材，則使用特殊藥材的係數
-                    if (bulkyHerb !== 'yes') {
-                        absorptionCoeff = window.specialHerbCoeff;
-                    }
-                    ratioText = `特殊藥材佔比${window.specialHerbRatio.toFixed(1)}%（${window.specialHerbRatio > 50 ? '50%以上' : '50%以下'}）`;
-                    
-                    // 更新係數原因
-                    if (bulkyHerb === 'yes' && window.specialHerbCoeff === 4.0) {
-                        coeffReason = '大體積藥材 + 特殊藥材（>50%）';
-                    } else if (bulkyHerb === 'yes') {
-                        coeffReason = '大體積藥材';
-                    } else {
-                        coeffReason = window.specialHerbRatio > 50 ? '特殊藥材（>50%）' : '特殊藥材（≤50%）';
-                    }
+                    absorptionCoeff = window.specialHerbCoeff;
+                    ratioText = `特殊及大體積藥材佔比 ${window.specialHerbRatio.toFixed(1)}%（${window.specialHerbRatio >= 30 ? '≥30%' : '<30%'}）`;
+                    coeffReason = window.specialHerbRatio >= 30 
+                        ? '特殊及大體積藥材（≥30%）' 
+                        : '佔比未達30%,視同一般藥材';
                 } else {
-                    alert('請先完成特殊藥材選擇並計算佔比！');
+                    alert('請先完成特殊及大體積藥材選擇並計算佔比！');
                     return;
                 }
-            } else if (bulkyHerb === 'yes') {
-                coeffReason = '大體積藥材';
             } else {
                 coeffReason = '一般藥材';
             }
@@ -1600,31 +1640,28 @@
             document.getElementById('days').value = '';
             document.getElementById('waterPerPack').value = '';
             document.getElementById('herbWeight').value = '';
-            document.getElementById('bulkyHerb').value = 'no';     // 重置大體積藥材
             document.getElementById('herbType').value = 'normal';  // 預設一般藥材
 
             // 隱藏特殊藥材相關區域
             document.getElementById('specialHerbsSelectSection').style.display = 'none';
-            document.getElementById('specialHerbsWeightSection').style.display = 'none';
             document.getElementById('ratioResultSection').style.display = 'none';
-            document.getElementById('herbInfoSection').style.display = 'block';
+            // herbInfoSection 維持隱藏(這個區塊現在不顯示)
 
-            // 清空所有特殊藥材的勾選(用 id 前綴 herb_check_ 比較準確)
-            document.querySelectorAll('input[id^="herb_check_"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
+            // 清空全域已勾選紀錄與重量暫存
+            window._selectedHerbCodes = new Set();
+            window._herbWeights = {};
 
-            // 清空所有特殊藥材的重量輸入框與換算顯示
-            const specialHerbs = ['蒲公英', '綿茵陳', '防風', '北沙參', '山藥', '黨參', '天門冬', '麥門冬',
-                                 '胖大海', '王不留行子', '葶藶子', '紫蘇子', '車前子', '菟絲子',
-                                 '薏苡仁', '赤小豆', '炒麥芽', '銀花', '淡竹葉', '白花舌蛇草'];
+            // 清空搜尋框
+            const searchBox = document.getElementById('herbSearchBox');
+            if (searchBox) searchBox.value = '';
 
-            specialHerbs.forEach(herb => {
-                const weightInput = document.getElementById(`weight_${herb}`);
-                if (weightInput) weightInput.value = '';
-                const convertSpan = document.getElementById(`convert_${herb}`);
-                if (convertSpan) convertSpan.textContent = '';
-            });
+            // 清空勾選清單容器
+            const container = document.getElementById('herbCheckboxContainer');
+            if (container) container.innerHTML = '';
+
+            // 隱藏已勾選預覽
+            const preview = document.getElementById('selectedHerbsPreview');
+            if (preview) preview.style.display = 'none';
 
             // 清空全域變數
             window.specialHerbRatio = null;
@@ -2241,35 +2278,28 @@
                 document.getElementById('days').value = '';  // 清空
                 document.getElementById('waterPerPack').value = '';  // 清空
                 document.getElementById('herbWeight').value = '';  // 清空
-                document.getElementById('bulkyHerb').value = 'no';  // 重置大體積藥材
                 document.getElementById('herbType').value = 'normal';  // 預設一般藥材
                 
                 // 隱藏特殊藥材區域
                 document.getElementById('specialHerbsSelectSection').style.display = 'none';
-                document.getElementById('specialHerbsWeightSection').style.display = 'none';
                 document.getElementById('ratioResultSection').style.display = 'none';
-                document.getElementById('herbInfoSection').style.display = 'block';
+                // herbInfoSection 維持隱藏
                 
-                // 清空所有特殊藥材的勾選
-                document.querySelectorAll('input[name="specialHerb"]').forEach(checkbox => {
-                    checkbox.checked = false;
-                });
+                // 清空全域已勾選紀錄與重量暫存
+                window._selectedHerbCodes = new Set();
+                window._herbWeights = {};
                 
-                // 清空所有特殊藥材的重量輸入框
-                const specialHerbs = ['蒲公英', '綿茵陳', '防風', '北沙參', '山藥', '黨參', '天門冬', '麥門冬',
-                                     '胖大海', '王不留行子', '葶藶子', '紫蘇子', '車前子', '菟絲子', 
-                                     '薏苡仁', '赤小豆', '炒麥芽', '銀花', '淡竹葉', '白花舌蛇草'];
+                // 清空搜尋框
+                const searchBox = document.getElementById('herbSearchBox');
+                if (searchBox) searchBox.value = '';
                 
-                specialHerbs.forEach(herb => {
-                    const weightInput = document.getElementById(`weight_${herb}`);
-                    if (weightInput) {
-                        weightInput.value = '';
-                    }
-                    const convertSpan = document.getElementById(`convert_${herb}`);
-                    if (convertSpan) {
-                        convertSpan.textContent = '';
-                    }
-                });
+                // 清空勾選清單容器
+                const container = document.getElementById('herbCheckboxContainer');
+                if (container) container.innerHTML = '';
+                
+                // 隱藏已勾選預覽
+                const preview = document.getElementById('selectedHerbsPreview');
+                if (preview) preview.style.display = 'none';
                 
                 // 清空全域變數
                 window.specialHerbRatio = null;
