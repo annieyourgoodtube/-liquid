@@ -2116,7 +2116,8 @@
                 employeeName: employeeName,
                 timestamp: timestamp,
                 date: new Date(timestamp).toLocaleDateString('zh-TW'),
-                time: new Date(timestamp).toLocaleTimeString('zh-TW')
+                // 使用 24 小時制(HH:MM:SS)讓試算表的時段統計公式能正確解析小時數
+                time: new Date(timestamp).toLocaleTimeString('zh-TW', { hour12: false })
             };
             
             // 送出資料到 Google Sheets
