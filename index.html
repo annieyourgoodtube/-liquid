@@ -1262,7 +1262,7 @@
                     <!-- 下排:重量輸入 + 錢 + 克數換算 -->
                     <div style="display: flex; align-items: center; gap: 4px; padding-left: 30px;">
                         <input type="number" id="weight_${code}" data-code="${code}" 
-                               min="0" step="0.1" placeholder="0" value="${weightVal}"
+                               min="0" step="0.01" placeholder="0" value="${weightVal}"
                                ${checked ? '' : 'disabled'}
                                oninput="convertQianToGram('${code}')"
                                style="width: 70px; padding: 6px 8px; font-size: 16px; font-weight: 600; text-align: right;
