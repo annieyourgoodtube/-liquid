@@ -164,6 +164,14 @@
             box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
         }
 
+        /* 重量輸入框與搜尋框(type=text)的 focus 效果 */
+        input[id^="weight_"]:focus,
+        #herbSearchBox:focus {
+            outline: none;
+            border-color: #2196F3 !important;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+        }
+
         input::placeholder {
             font-size: 24px;
             color: #999;
@@ -489,6 +497,7 @@
             }
             
             input[type="number"],
+            input[type="text"],
             select {
                 font-size: 14px;
                 padding: 10px 12px;
@@ -560,6 +569,39 @@
             
             .grid-result {
                 gap: 10px;
+            }
+
+            /* ===== 手機版:特殊及大體積藥材清單優化 ===== */
+            /* 藥材清單強制一排一個,卡片更寬不擠 */
+            #herbCheckboxContainer {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+                max-height: 60vh !important;
+                padding: 8px !important;
+            }
+
+            /* 搜尋框加大,手機好點 */
+            #herbSearchBox {
+                font-size: 17px !important;
+                padding: 14px 12px !important;
+            }
+
+            /* 重量輸入框在手機上加大,固定寬度不被擠壓 */
+            input[id^="weight_"] {
+                font-size: 22px !important;
+                padding: 14px 12px !important;
+                width: 110px !important;
+            }
+
+            /* 清空確認警告條:手機改直式排列 */
+            #clearConfirmBar {
+                flex-direction: column !important;
+                gap: 12px !important;
+                padding: 16px !important;
+            }
+            #clearConfirmBar > div:first-child {
+                font-size: 17px !important;
+                text-align: center;
             }
         }
 
@@ -977,7 +1019,7 @@
                 </div>
 
                 <!-- 藥材清單(JS 動態渲染) - 固定一排 3 個 -->
-                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
                     <!-- 由 renderHerbList() 動態生成 -->
                 </div>
 
@@ -1226,7 +1268,7 @@
             // 已存在的勾選狀態:從 window._selectedHerbCodes 取得
             // 已存在的重量:從現有 input 抓取(只抓已勾選的,避免空 input 污染暫存)
             if (!window._herbWeights) window._herbWeights = {};
-            container.querySelectorAll('input[type="number"]').forEach(inp => {
+            container.querySelectorAll('input[id^="weight_"]').forEach(inp => {
                 const code = inp.dataset.code;
                 if (code && window._selectedHerbCodes && window._selectedHerbCodes.has(code)) {
                     // 只同步「已勾選」的項目;沒勾選的 disabled input 不要覆蓋暫存
@@ -1241,35 +1283,36 @@
                 
                 const row = document.createElement('div');
                 row.style.cssText = `
-                    display: flex; flex-direction: column; gap: 8px; padding: 10px 12px;
+                    display: flex; flex-direction: column; gap: 10px; padding: 14px;
                     background: ${checked ? '#e8f5e9' : '#ffffff'};
                     border: 2px solid ${checked ? '#4CAF50' : '#e0e0e0'};
-                    border-radius: 8px; transition: all 0.2s; min-width: 0;
+                    border-radius: 10px; transition: all 0.2s; min-width: 0;
                 `;
                 row.innerHTML = `
                     <!-- 上排:勾選框 + 代碼:藥材名 -->
-                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
                         <input type="checkbox" id="herb_check_${code}" data-code="${code}" data-name="${name}" 
                                ${checked ? 'checked' : ''}
                                onchange="onHerbCheckChanged(this)"
-                               style="width: 22px; height: 22px; cursor: pointer; flex-shrink: 0;">
-                        <label for="herb_check_${code}" style="flex: 1; cursor: pointer; line-height: 1.25; min-width: 0; overflow: hidden;">
+                               style="width: 26px; height: 26px; cursor: pointer; flex-shrink: 0;">
+                        <label for="herb_check_${code}" style="flex: 1; cursor: pointer; line-height: 1.3; min-width: 0;">
                             <span style="color: #1976d2; font-family: monospace; font-size: 16px; font-weight: 700;">${code}</span>
                             <span style="color: #999; font-size: 16px;">：</span>
                             <span style="font-size: 19px; font-weight: 600; color: #1B4D3E;">${name}</span>
                         </label>
                     </div>
                     <!-- 下排:重量輸入 + 錢 + 克數換算 -->
-                    <div style="display: flex; align-items: center; gap: 4px; padding-left: 30px;">
-                        <input type="number" id="weight_${code}" data-code="${code}" 
-                               min="0" step="0.01" placeholder="0" value="${weightVal}"
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="text" inputmode="decimal" id="weight_${code}" data-code="${code}" 
+                               placeholder="重量" value="${weightVal}"
                                ${checked ? '' : 'disabled'}
                                oninput="convertQianToGram('${code}')"
-                               style="width: 70px; padding: 6px 8px; font-size: 16px; font-weight: 600; text-align: right;
-                                      border: 2px solid ${checked ? '#2196F3' : '#e0e0e0'}; border-radius: 6px;
-                                      background: ${checked ? '#fff' : '#f5f5f5'}; min-width: 0;">
-                        <span style="font-size: 14px; color: #666; font-weight: 600;">錢</span>
-                        <span style="font-size: 13px; color: #2C5F2D; font-weight: 600; margin-left: 4px;" id="converted_${code}"></span>
+                               style="width: 100px; flex-shrink: 0; padding: 12px 12px;
+                                      font-size: 20px; font-weight: 700; text-align: right;
+                                      border: 2px solid ${checked ? '#2196F3' : '#e0e0e0'}; border-radius: 8px;
+                                      background: ${checked ? '#fff' : '#f5f5f5'}; box-sizing: border-box;">
+                        <span style="font-size: 18px; color: #444; font-weight: 700; flex-shrink: 0;">錢</span>
+                        <span style="font-size: 15px; color: #2C5F2D; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="converted_${code}"></span>
                     </div>
                 `;
                 container.appendChild(row);
@@ -1381,11 +1424,23 @@
             const convertedSpan = document.getElementById(`converted_${code}`);
             if (!qianInput) return;
 
-            const qianValue = parseFloat(qianInput.value) || 0;
+            // 清理輸入:只保留數字和小數點(防止手機輸入法打進非數字字元)
+            let cleaned = qianInput.value.replace(/[^0-9.]/g, '');
+            // 只允許一個小數點(多餘的移除)
+            const firstDot = cleaned.indexOf('.');
+            if (firstDot !== -1) {
+                cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+            }
+            // 若清理後和原值不同,更新輸入框(保留游標在結尾)
+            if (cleaned !== qianInput.value) {
+                qianInput.value = cleaned;
+            }
+
+            const qianValue = parseFloat(cleaned) || 0;
 
             // 同步到暫存(避免搜尋過濾時 DOM 重建會弄丟值)
             if (!window._herbWeights) window._herbWeights = {};
-            window._herbWeights[code] = qianInput.value;
+            window._herbWeights[code] = cleaned;
 
             if (convertedSpan) {
                 if (qianValue > 0) {
@@ -1408,7 +1463,7 @@
 
             // 先把當前畫面上的重量值同步到暫存(只同步已勾選的,避免空 input 污染)
             if (!window._herbWeights) window._herbWeights = {};
-            document.querySelectorAll('#herbCheckboxContainer input[type="number"]').forEach(inp => {
+            document.querySelectorAll('#herbCheckboxContainer input[id^="weight_"]').forEach(inp => {
                 const code = inp.dataset.code;
                 if (code && window._selectedHerbCodes && window._selectedHerbCodes.has(code)) {
                     window._herbWeights[code] = inp.value;
