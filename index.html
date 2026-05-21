@@ -1019,7 +1019,7 @@
                 </div>
 
                 <!-- 藥材清單(JS 動態渲染) - 固定一排 3 個 -->
-                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
                     <!-- 由 renderHerbList() 動態生成 -->
                 </div>
 
@@ -1298,7 +1298,7 @@
                         <label for="herb_check_${code}" style="flex: 1; cursor: pointer; line-height: 1.3; min-width: 0;">
                             <span style="color: #1976d2; font-family: monospace; font-size: 16px; font-weight: 700;">${code}</span>
                             <span style="color: #999; font-size: 16px;">：</span>
-                            <span style="font-size: 19px; font-weight: 600; color: #1B4D3E;">${name}</span>
+                            <span style="font-size: 22px; font-weight: 700; color: #1B4D3E;">${name}</span>
                         </label>
                     </div>
                     <!-- 下排:重量輸入 + 錢 + 克數換算 -->
