@@ -572,12 +572,32 @@
             }
 
             /* ===== 手機版:特殊及大體積藥材清單優化 ===== */
-            /* 藥材清單強制一排一個,卡片更寬不擠 */
+            /* 藥材清單一排三個,卡片緊湊 */
             #herbCheckboxContainer {
-                grid-template-columns: 1fr !important;
-                gap: 12px !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px !important;
                 max-height: 60vh !important;
-                padding: 8px !important;
+                padding: 6px !important;
+            }
+
+            /* 手機一排三個:卡片內距縮小 */
+            #herbCheckboxContainer > div {
+                padding: 8px 6px !important;
+                gap: 6px !important;
+            }
+
+            /* 勾選框縮小 */
+            #herbCheckboxContainer input[type="checkbox"] {
+                width: 20px !important;
+                height: 20px !important;
+            }
+
+            /* 代碼與藥名字體縮小 */
+            #herbCheckboxContainer label span {
+                font-size: 13px !important;
+            }
+            #herbCheckboxContainer label span:last-child {
+                font-size: 15px !important;
             }
 
             /* 搜尋框加大,手機好點 */
@@ -586,11 +606,24 @@
                 padding: 14px 12px !important;
             }
 
-            /* 重量輸入框在手機上加大,固定寬度不被擠壓 */
+            /* 手機一排三個:重量區改直式(輸入框一行、單位換算一行)*/
+            .weight-row {
+                gap: 4px !important;
+            }
             input[id^="weight_"] {
-                font-size: 22px !important;
-                padding: 14px 12px !important;
-                width: 110px !important;
+                font-size: 16px !important;
+                padding: 8px 6px !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                flex: 1 1 100% !important;
+            }
+            .weight-row .qian-label {
+                font-size: 13px !important;
+            }
+            .weight-row .converted-label {
+                font-size: 12px !important;
+                flex-basis: 100% !important;
+                text-align: right;
             }
 
             /* 清空確認警告條:手機改直式排列 */
@@ -1019,7 +1052,7 @@
                 </div>
 
                 <!-- 藥材清單(JS 動態渲染) - 固定一排 3 個 -->
-                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
+                <div id="herbCheckboxContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; max-height: 550px; overflow-y: auto; padding: 10px; background: #fafafa; border-radius: 8px; border: 1px solid #e0e0e0;">
                     <!-- 由 renderHerbList() 動態生成 -->
                 </div>
 
@@ -1217,35 +1250,28 @@
         // ============================================================
         const HERB_LIST = [
             ["RA07","青蒿"],["RA09","敗醬草"],["RA10","藿香"],["RA11","佩蘭"],
-            ["RB09","枇杷葉"],["RB10","龍膽草"],["RB11","艾葉"],
-            ["RC11","紫蘇葉"],["RD10","魚腥草"],
-            ["RE08","雞血藤"],["RE09","白花蛇舌草"],["RE10","半支蓮"],["RE11","蒲公英"],
-            ["RF09","杜仲炒"],["RF10","益母草"],
-            ["RG08","厚朴筒"],["RG11","茵陳綿"],
-            ["RH10","荊芥"],["RH11","旱蓮草"],
-            ["RI09","旋覆花"],["RI10","淫羊藿"],["RI11","桑葉"],
-            ["RJ09","夏枯花草"],["RJ10","淡竹葉"],["RJ11","蟬蛻"],
-            ["RK01","蘆根"],["RK09","絲瓜絡"],["RK10","通草"],["RK11","玉米鬚"],
-            ["RL02","白豆蔻"],["RL09","釘地蜈蚣"],["RL10","丁豎朽"],["RL11","皂刺"],
-            ["SA01","王不留行"],
-            ["SB07","羌活"],["SB12","紫草"],
-            ["SC07","雙鉤藤"],["SC08","五靈脂"],["SC13","升麻"],
-            ["SD06","豬苓"],["SD07","劉寄奴"],["SD12","蔓荊子"],["SD13","白英"],["SD14","故紙花"],
-            ["SE03","銀花"],["SE12","茜草"],
-            ["TA04","瞿麥"],["TA07","龍葵"],["TA09","荷葉"],["TA10","澤蘭-正"],["TA11","豨薟草"],
-            ["TA12","小本七層塔"],["TA14","白尾蜈蚣"],["TA15","石上柏"],["TA17","麻芝糊草"],
-            ["TB06","仙鶴草"],["TB10","穿心蓮"],["TB12","伸筋草"],["TB14","燈心草"],
-            ["TB16","黑荊芥"],["TB17","馬齒莧"],["TB18","金錢薄荷"],
-            ["VA07","徐長卿"],["VA08","貫眾"],["VA09","露蜂房"],
-            ["WA38","紅花川W26"],["WA71","栝蔞實W51"],["WA73","玉竹W46"],
-            ["WA77","菊花W12"],["WA79","佛手W32"],["WA85","守宮W50"],
-            ["WB11","薄荷RC09"],["WB21","天麻RG10"],["WB28","靈芝SD15"],["WB29","土茯苓VA16"],
-            ["WD11","雞內金TB11"],["WE25","桔梗RC08"],["WX11","★蟾蜍乾W49"],
-            // 原 20 種裡新清單沒有的藥材(自訂代碼 X01~X14)
-            ["WA83","防風"],["RH02","北沙參"],["RI06","山藥"],["WA35","黨參"],
-            ["WA45","天門冬"],["WA61","麥門冬"],["RJ01","胖大海"],["SB09","葶藶子"],
-            ["SB11","紫蘇子"],["SC10","車前子"],["SE02","菟絲子"],["WA81","薏苡仁"],
-            ["WA43","赤小豆"],["WA41","炒麥芽"]
+            ["RB09","枇杷葉"],["RB10","龍膽草"],["RB11","艾葉"],["RC08","桔梗"],
+            ["RC09","薄荷"],["RC11","紫蘇葉"],["RD10","魚腥草"],["RE08","雞血藤"],
+            ["RE09","白花蛇舌草"],["RE10","半支蓮"],["RE11","蒲公英"],["RF09","杜仲炒"],
+            ["RF10","益母草"],["RG08","厚朴筒"],["RG10","天麻"],["RG11","茵陳綿"],
+            ["RH02","北沙參"],["RH10","荊芥"],["RH11","旱蓮草"],["RI06","山藥"],
+            ["RI09","旋覆花"],["RI10","淫羊藿"],["RI11","桑葉"],["RJ01","胖大海"],
+            ["RJ09","夏枯花草"],["RJ10","淡竹葉"],["RJ11","蟬蛻"],["RK01","蘆根"],
+            ["RK09","絲瓜絡"],["RK10","通草"],["RK11","玉米鬚"],["RL02","白豆蔻"],
+            ["RL09","釘地蜈蚣"],["RL10","丁豎朽"],["RL11","皂刺"],["SA01","王不留行"],
+            ["SB07","羌活"],["SB09","葶藶子"],["SB11","紫蘇子"],["SB12","紫草"],
+            ["SC07","雙鉤藤"],["SC08","五靈脂"],["SC10","車前子"],["SC13","升麻"],
+            ["SD06","豬苓"],["SD07","劉寄奴"],["SD12","蔓荊子"],["SD13","白英"],
+            ["SD14","故紙花"],["SD15","靈芝"],["SE02","菟絲子"],["SE03","銀花"],
+            ["SE12","茜草"],["TA04","瞿麥"],["TA07","龍葵"],["TA09","荷葉"],
+            ["TA10","澤蘭-正"],["TA11","豨薟草"],["TA12","小本七層塔"],["TA14","白尾蜈蚣"],
+            ["TA15","石上柏"],["TA17","麻芝糊草"],["TB06","仙鶴草"],["TB10","穿心蓮"],
+            ["TB11","雞內金"],["TB12","伸筋草"],["TB14","燈心草"],["TB16","黑荊芥"],
+            ["TB17","馬齒莧"],["TB18","金錢薄荷"],["VA07","徐長卿"],["VA08","貫眾"],
+            ["VA09","露蜂房"],["VA16","土茯苓"],["W12","菊花"],["W26","紅花川"],
+            ["W32","佛手"],["W46","玉竹"],["W49","★蟾蜍乾"],["W50","守宮"],
+            ["W51","栝蔞實"],["WA35","黨參"],["WA41","炒麥芽"],["WA43","赤小豆"],
+            ["WA45","天門冬"],["WA61","麥門冬"],["WA81","薏苡仁"],["WA83","防風"]
         ];
 
         // 將 (code, name) 配對轉成可作為 HTML id 的 key
@@ -1302,7 +1328,7 @@
                         </label>
                     </div>
                     <!-- 下排:重量輸入 + 錢 + 克數換算 -->
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="weight-row" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <input type="text" inputmode="decimal" id="weight_${code}" data-code="${code}" 
                                placeholder="重量" value="${weightVal}"
                                ${checked ? '' : 'disabled'}
@@ -1311,8 +1337,8 @@
                                       font-size: 20px; font-weight: 700; text-align: right;
                                       border: 2px solid ${checked ? '#2196F3' : '#e0e0e0'}; border-radius: 8px;
                                       background: ${checked ? '#fff' : '#f5f5f5'}; box-sizing: border-box;">
-                        <span style="font-size: 18px; color: #444; font-weight: 700; flex-shrink: 0;">錢</span>
-                        <span style="font-size: 15px; color: #2C5F2D; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="converted_${code}"></span>
+                        <span class="qian-label" style="font-size: 18px; color: #444; font-weight: 700; flex-shrink: 0;">錢</span>
+                        <span class="converted-label" style="font-size: 15px; color: #2C5F2D; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="converted_${code}"></span>
                     </div>
                 `;
                 container.appendChild(row);
