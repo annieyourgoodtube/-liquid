@@ -2063,10 +2063,10 @@
         function updateCurrentEmployeeDisplay(employeeId) {
             const employees = JSON.parse(localStorage.getItem('employeeList') || '{}');
             const employeeData = employees[employeeId];
-            // 查不到姓名時,用員工編號代替(不顯示「未登記」)
+            // 查不到姓名時,直接用員工編號當姓名
             let name = employeeData ? (employeeData.name || employeeData) : '';
             if (!name || name === '未知' || name === '未登記') {
-                name = '工號' + employeeId;
+                name = employeeId;
             }
             document.getElementById('currentEmployeeId').textContent = employeeId;
             document.getElementById('currentEmployeeName').textContent = name;
@@ -2254,7 +2254,7 @@
             // 查不到姓名時,直接用員工編號當作姓名(避免出現「未知」無法辨識)
             let employeeName = employeeData ? (employeeData.name || employeeData) : '';
             if (!employeeName || employeeName === '未知') {
-                employeeName = '工號' + employeeId;
+                employeeName = employeeId;
             }
             
             const data = {
