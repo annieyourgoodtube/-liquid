@@ -128,6 +128,7 @@
         }
 
         input[type="number"],
+        input.big-input,
         select {
             width: 100%;
             padding: 16px 20px;
@@ -137,6 +138,7 @@
             transition: all 0.3s;
             font-family: 'Source Han Sans TC', 'Noto Sans TC', '思源黑體', sans-serif;
             font-weight: bold;
+            box-sizing: border-box;
         }
 
         /* 數字使用Arial粗體 */
@@ -158,6 +160,7 @@
         }
 
         input[type="number"]:focus,
+        input.big-input:focus,
         select:focus {
             outline: none;
             border-color: #2C5F2D;
@@ -626,15 +629,9 @@
                 text-align: right;
             }
 
-            /* 清空確認警告條:手機改直式排列 */
-            #clearConfirmBar {
-                flex-direction: column !important;
-                gap: 12px !important;
-                padding: 16px !important;
-            }
-            #clearConfirmBar > div:first-child {
-                font-size: 17px !important;
-                text-align: center;
+            /* 清空確認彈窗:手機版稍微縮小內距,字體保持清楚 */
+            #clearConfirmBar > div {
+                max-width: 90vw !important;
             }
         }
 
@@ -693,33 +690,52 @@
 </head>
 <body>
     <!-- 清空資料確認警告條(預設隱藏,從畫面上方滑入) -->
+    <!-- 清空資料確認彈窗(預設隱藏,中央彈出搭配背景遮罩) -->
     <div id="clearConfirmBar" style="
-        position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
-        background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
-        color: white; padding: 18px 24px;
-        box-shadow: 0 4px 20px rgba(211, 47, 47, 0.5);
-        transform: translateY(-100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-        <div style="font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 28px;">⚠️</span>
-            <span>確定要清空所有資料嗎?此動作無法復原</span>
-        </div>
-        <div style="display: flex; gap: 12px;">
-            <button onclick="confirmClearForm()" style="
-                background: white; color: #b71c1c; border: none; padding: 12px 28px;
-                border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.2s;"
-                onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 10px rgba(0,0,0,0.3)';"
-                onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 6px rgba(0,0,0,0.2)';">
-                ✓ 確定清空
-            </button>
-            <button onclick="cancelClearForm()" style="
-                background: transparent; color: white; border: 2px solid white; padding: 10px 24px;
-                border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s;"
-                onmouseover="this.style.background='rgba(255,255,255,0.15)';"
-                onmouseout="this.style.background='transparent';">
-                ✕ 取消
-            </button>
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;
+        background: rgba(0, 0, 0, 0.55);
+        display: none;
+        align-items: center; justify-content: center;
+        opacity: 0; transition: opacity 0.25s ease;
+        padding: 20px; box-sizing: border-box;">
+        <div style="
+            background: white; border-radius: 16px;
+            max-width: 460px; width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border-top: 8px solid #d32f2f;
+            overflow: hidden;
+            transform: scale(0.9); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <!-- 標題區 -->
+            <div style="padding: 28px 28px 16px; text-align: center;">
+                <div style="font-size: 56px; line-height: 1; margin-bottom: 12px;">⚠️</div>
+                <div style="font-size: 22px; font-weight: 700; color: #b71c1c; margin-bottom: 8px;">
+                    確定要清空所有資料嗎?
+                </div>
+                <div style="font-size: 15px; color: #666; line-height: 1.5;">
+                    此動作無法復原,所有輸入和勾選將會全部清空
+                </div>
+            </div>
+            <!-- 按鈕區 -->
+            <div style="display: flex; gap: 12px; padding: 16px 24px 24px;">
+                <button onclick="cancelClearForm()" style="
+                    flex: 1; background: #f5f5f5; color: #333; border: 2px solid #ddd;
+                    padding: 14px; border-radius: 10px; font-size: 17px; font-weight: 700;
+                    cursor: pointer; transition: all 0.2s;"
+                    onmouseover="this.style.background='#e8e8e8';"
+                    onmouseout="this.style.background='#f5f5f5';">
+                    ✕ 取消
+                </button>
+                <button onclick="confirmClearForm()" style="
+                    flex: 1; background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+                    color: white; border: none;
+                    padding: 14px; border-radius: 10px; font-size: 17px; font-weight: 700;
+                    cursor: pointer; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+                    transition: all 0.2s;"
+                    onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(211, 47, 47, 0.5)';"
+                    onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(211, 47, 47, 0.4)';">
+                    ✓ 確定清空
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1013,8 +1029,9 @@
                     </div>
 
                     <div class="input-group">
-                        <label>藥材總重（g）</label>
-                        <input type="number" id="herbWeight" min="1" placeholder="請輸入藥材總重量（g）">
+                        <label>藥材總重（錢）</label>
+                        <input type="text" inputmode="decimal" class="big-input" id="herbWeight" placeholder="請輸入藥材總重(錢)" oninput="updateHerbWeightConvert()">
+                        <div id="herbWeightConvert" style="margin-top: 6px; font-size: 14px; color: #2C5F2D; font-weight: 700; min-height: 18px;"></div>
                     </div>
                 </div>
 
@@ -1478,14 +1495,47 @@
             }
         }
 
+        // 藥材總重(錢)輸入時:清理輸入 + 即時換算克數
+        function updateHerbWeightConvert() {
+            const inp = document.getElementById('herbWeight');
+            const convertDiv = document.getElementById('herbWeightConvert');
+            if (!inp) return;
+
+            // 清理輸入:只保留數字和一個小數點(防止手機輸入法打進非數字字元)
+            let cleaned = inp.value.replace(/[^0-9.]/g, '');
+            const firstDot = cleaned.indexOf('.');
+            if (firstDot !== -1) {
+                cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+            }
+            if (cleaned !== inp.value) inp.value = cleaned;
+
+            const qian = parseFloat(cleaned) || 0;
+            if (convertDiv) {
+                if (qian > 0) {
+                    convertDiv.textContent = `≈ ${(qian * 3.75).toFixed(2)} g (1錢 = 3.75g)`;
+                } else {
+                    convertDiv.textContent = '';
+                }
+            }
+        }
+
+        // 取得藥材總重(克數):從輸入框讀「錢」並換算成克
+        function getHerbWeightInGram() {
+            const qian = parseFloat(document.getElementById('herbWeight').value) || 0;
+            return qian * 3.75;
+        }
+
         // 計算特殊及大體積藥材佔比
         function calculateRatio() {
-            const herbWeight = parseFloat(document.getElementById('herbWeight').value);
+            const herbWeightQian = parseFloat(document.getElementById('herbWeight').value);
             
-            if (!herbWeight || herbWeight <= 0) {
-                alert('請先輸入藥材總重量！');
+            if (!herbWeightQian || herbWeightQian <= 0) {
+                alert('請先輸入藥材總重量(錢)!');
                 return;
             }
+
+            // 輸入是「錢」,換算成「克」(1錢 = 3.75g)再去算佔比
+            const herbWeight = herbWeightQian * 3.75;
 
             // 先把當前畫面上的重量值同步到暫存(只同步已勾選的,避免空 input 污染)
             if (!window._herbWeights) window._herbWeights = {};
@@ -1563,14 +1613,17 @@
             const frequency = parseInt(document.getElementById('frequency').value);
             const days = parseInt(document.getElementById('days').value);
             const waterPerPack = parseFloat(document.getElementById('waterPerPack').value);
-            const herbWeight = parseFloat(document.getElementById('herbWeight').value);
+            const herbWeightQian = parseFloat(document.getElementById('herbWeight').value);
             const herbType = document.getElementById('herbType').value;
 
             // 驗證輸入
-            if (!herbWeight || herbWeight <= 0) {
-                alert('請輸入有效的藥材總重量！');
+            if (!herbWeightQian || herbWeightQian <= 0) {
+                alert('請輸入有效的藥材總重量(錢)!');
                 return;
             }
+
+            // 輸入是「錢」,內部換算成「克」(1錢 = 3.75g)
+            const herbWeight = herbWeightQian * 3.75;
 
             if (!waterPerPack || waterPerPack <= 0) {
                 alert('請輸入有效的單包水量！');
@@ -1720,7 +1773,8 @@
             }
 
             // 顯示計算公式
-            let formulaText = `總加水量 = 藥材總重(${herbWeight}g) × ${absorptionCoeff} + 總包數(${totalPacks}) × 單包概算(${waterEstimate}ml)`;
+            let formulaText = `藥材總重: ${herbWeightQian} 錢 × 3.75 = ${herbWeight.toFixed(2)} g\n\n`;
+            formulaText += `總加水量 = 藥材總重(${herbWeight.toFixed(2)}g) × ${absorptionCoeff} + 總包數(${totalPacks}) × 單包概算(${waterEstimate}ml)`;
             formulaText += `\n= ${Math.round(absorption)} + ${liquidOutput}`;
             formulaText += ` = ${Math.round(totalWater)} ml`;
             formulaText += `\n\n單包概算 = ${waterPerPack}ml + 20ml = ${waterEstimate}ml`;
@@ -1774,6 +1828,9 @@
             document.getElementById('days').value = '';
             document.getElementById('waterPerPack').value = '';
             document.getElementById('herbWeight').value = '';
+            // 清空藥材總重的克數換算顯示
+            const _hwc = document.getElementById('herbWeightConvert');
+            if (_hwc) _hwc.textContent = '';
             document.getElementById('herbType').value = 'normal';  // 預設一般藥材
 
             // 隱藏特殊藥材相關區域
@@ -2413,33 +2470,48 @@
 
         // ===== 員工維護功能 =====
         
-        // 清空表單:第一步,顯示頁面上方的警告條(取代瀏覽器原生 confirm)
+        // 清空表單:第一步,顯示中央確認彈窗(取代瀏覽器原生 confirm)
         function clearForm() {
             const bar = document.getElementById('clearConfirmBar');
-            if (bar) {
-                bar.style.transform = 'translateY(0)';
-                // 捲到頁面頂部讓使用者看到警告條
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            if (!bar) return;
+            bar.style.display = 'flex';
+            // 用 requestAnimationFrame 確保 display 切換後再觸發動畫
+            requestAnimationFrame(() => {
+                bar.style.opacity = '1';
+                const box = bar.firstElementChild;
+                if (box) box.style.transform = 'scale(1)';
+            });
         }
 
-        // 取消清空 - 收起警告條
+        // 取消清空 - 收起彈窗
         function cancelClearForm() {
             const bar = document.getElementById('clearConfirmBar');
-            if (bar) bar.style.transform = 'translateY(-100%)';
+            if (!bar) return;
+            bar.style.opacity = '0';
+            const box = bar.firstElementChild;
+            if (box) box.style.transform = 'scale(0.9)';
+            setTimeout(() => { bar.style.display = 'none'; }, 250);
         }
 
-        // 確認清空 - 收起警告條並真正執行清空
+        // 確認清空 - 收起彈窗並真正執行清空
         function confirmClearForm() {
-            // 先收起警告條
+            // 先收起彈窗(用動畫)
             const bar = document.getElementById('clearConfirmBar');
-            if (bar) bar.style.transform = 'translateY(-100%)';
+            if (bar) {
+                bar.style.opacity = '0';
+                const box = bar.firstElementChild;
+                if (box) box.style.transform = 'scale(0.9)';
+                setTimeout(() => { bar.style.display = 'none'; }, 250);
+            }
 
             // 清空所有輸入欄位
             document.getElementById('frequency').value = '2';  // 預設BID
             document.getElementById('days').value = '';
             document.getElementById('waterPerPack').value = '';
             document.getElementById('herbWeight').value = '';
+            // 清空藥材總重的克數換算顯示
+            const _hwc = document.getElementById('herbWeightConvert');
+            if (_hwc) _hwc.textContent = '';
             document.getElementById('herbType').value = 'normal';  // 預設一般藥材
             
             // 隱藏特殊藥材區域
